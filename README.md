@@ -14,14 +14,22 @@
 
 `npm install`
 
-## Building and Running the Application
+## Development Workflow (Building, Running, Testing)
 
-TODO(Peter): Figure out how to configure TSC to auto compile and rerun the project for easy dev.
+**Compile the code and start the server run:**
 
-To compile typescript to javascript: 
-`npm run tsc`
+`npm run start`
 
-To run the project from local compiled files:
+**Start nodemon to watch src and live restart the server:**
+
 `npm run dev`
+
+**Run Unit/Integration Tests**
+
+`npm run test`
+
+**Run Test framework in *watch* mode**
+
+`npm run test:watch`
 
 ---
