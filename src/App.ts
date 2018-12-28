@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { createConnection, Connection } from "typeorm"
 import express from 'express';
-import { print } from 'util';
+import { User } from './models/entity/User';
 
 class App {
   public express: express.Express
@@ -26,7 +26,18 @@ class App {
           __dirname + "/models/entity/*.ts"
         ],
         synchronize: true
-    }).then(connection => {
+    }).then(async connection => {
+        let user = new User();
+        user.email = 'test@test.com'
+        user.active = true
+        user.access = 'All'
+        user.first_name = 'Tester'
+        user.last_name = "McTesterson"
+        user.dateofbirth = "01-01-1990"
+
+        await connection.manager.save(user);
+        console.log(' Test User has been saved.')
+
       // TODO: Move this to another area
     }).catch(error => {
       console.log(error)

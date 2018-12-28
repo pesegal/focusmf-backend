@@ -4,7 +4,8 @@
   "description": "Rest API backend for Focus.MF project.",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "compile": "tsc",
+    "start": "tsc && ts-node src/index.ts",
     "dev": "nodemon",
     "test": "jest",
     "test:watch": "jest --watch"
