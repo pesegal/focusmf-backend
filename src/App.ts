@@ -12,6 +12,7 @@ class App {
     this.mountRoutes()
   }
 
+  
   public initDatabaseConnection (): void {
     console.log(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
     createConnection({

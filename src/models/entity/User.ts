@@ -2,8 +2,8 @@ import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
-    id!: number; // ! ts non-null assertion operator, explicitly tell TS that these will be defined elseware.
+    @PrimaryGeneratedColumn('uuid')
+    id!: string; // ! ts non-null assertion operator, explicitly tell TS that these will be defined elseware.
 
     @Column()
     email!: string;
