@@ -19,4 +19,4 @@ CREATE DATABASE focusmf
     CONNECTION LIMIT = -1;
 
 COMMENT ON DATABASE focusmf
-    IS 'This the local testing database for focus.mf project.';
+    IS 'This the local development database for focus.mf project.';
