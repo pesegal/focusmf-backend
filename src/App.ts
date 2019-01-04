@@ -1,7 +1,8 @@
 import 'reflect-metadata'
-import { createConnection, Connection } from "typeorm"
+import { createConnection } from "typeorm"
 import express from 'express';
 import { User } from './models/entity/User';
+import { config } from 'node-config-ts';
 
 class App {
   public express: express.Express
@@ -15,19 +16,20 @@ class App {
   
   public initDatabaseConnection (): void {
     console.log(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
-    createConnection({
-        type: "postgres",
-        host: "localhost",
-        port: 5432,
-        // TODO(Peter): Load these params from config file.
-        username: "focus",
-        password: "focus",
-        database: "focusmf",
-        entities: [
+    
+    // Todo(peter) go back to using config. Abd directly create typed variables for the configation object.
+    const connectionConfig = {
+      ...config.dbConfig,
+      ...{
+        entities: [   
           __dirname + "/models/entity/*.ts"
-        ],
-        synchronize: true
-    }).then(async connection => {
+        ]
+      }
+    }
+    
+    console.log(connectionConfig);
+    
+    createConnection(connectionConfig).then(async connection => {
         let user = new User();
         user.email = 'test@test.com'
         user.active = true
