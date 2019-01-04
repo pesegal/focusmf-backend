@@ -2,25 +2,25 @@
 This project is the backend services for the Focus.MF project.
 ## Getting started:
 
-1. Install Node Version manager for easier management of node packages: 
+Install Node Version manager for easier management of node packages: 
 
 ```bash
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
 ```
 
-2. Install the current LTS version of node. *Currently we are using 10.*
+Install the current LTS version of node. *Currently we are using 10.*
 
 ```bash
 nvm install 10
 ```
 
-3. Install the project dependencies
+Install the project dependencies
 
 ```bash
 npm install
 ```
 
-4. Initialize the local development database. This will create the initial databases and user accounts needed to do local development on the project. In the projects root directory run:
+Initialize the local development database. This will create the initial databases and user accounts needed to do local development on the project. In the projects root directory run:
 
 ```bash
 sudo -su postgres psql --echo-all --file=init-config.sql
