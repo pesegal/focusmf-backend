@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { createConnection, ConnectionOptions, Connection } from "typeorm"
+import { createConnection, ConnectionOptions } from "typeorm"
 import express from 'express';
 import { User } from './models/entity/User';
 import config from 'config';
