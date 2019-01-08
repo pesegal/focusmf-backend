@@ -1,13 +1,30 @@
 import 'reflect-metadata'
-import { createConnection } from "typeorm"
+import { createConnection, ConnectionOptions, Connection } from "typeorm"
 import express from 'express';
 import { User } from './models/entity/User';
-import { config } from 'node-config-ts';
+import config from 'config';
 
 class App {
   public express: express.Express
+  //public connection: Connection
+  private dbConnectionConfig: ConnectionOptions
 
   constructor () {
+
+    // Load in the connection config information.
+    this.dbConnectionConfig = {
+      type: 'postgres',
+      host: config.get('host'),
+      port: config.get('port'),
+      username: config.get('username'),
+      password: config.get('password'),
+      database: config.get('database'),
+      synchronize: config.get('synchronize'),
+      entities: [   
+        __dirname + "/models/entity/*.ts"
+      ]
+    }
+
     this.initDatabaseConnection()
     this.express = express()
     this.mountRoutes()
@@ -16,20 +33,9 @@ class App {
   
   public initDatabaseConnection (): void {
     console.log(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
-    
-    // Todo(peter) go back to using config. Abd directly create typed variables for the configation object.
-    const connectionConfig = {
-      ...config.dbConfig,
-      ...{
-        entities: [   
-          __dirname + "/models/entity/*.ts"
-        ]
-      }
-    }
-    
-    console.log(connectionConfig);
-    
-    createConnection(connectionConfig).then(async connection => {
+
+    // TODO(PETER): Return an active connection object and set 
+    createConnection(this.dbConnectionConfig).then(async connection => {
         let user = new User();
         user.email = 'test@test.com'
         user.active = true
