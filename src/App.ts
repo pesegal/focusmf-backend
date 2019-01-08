@@ -3,10 +3,10 @@ import { createConnection, ConnectionOptions, Connection } from "typeorm"
 import express from 'express';
 import { User } from './models/entity/User';
 import config from 'config';
+import { connect } from 'net';
 
 class App {
   public express: express.Express
-  //public connection: Connection
   private dbConnectionConfig: ConnectionOptions
 
   constructor () {
@@ -30,27 +30,16 @@ class App {
     this.mountRoutes()
   }
 
-  
   public initDatabaseConnection (): void {
-    console.log(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
-
-    // TODO(PETER): Return an active connection object and set 
-    createConnection(this.dbConnectionConfig).then(async connection => {
-        let user = new User();
-        user.email = 'test@test.com'
-        user.active = true
-        user.access = 'All'
-        user.first_name = 'Tester'
-        user.last_name = "McTesterson"
-        user.dateofbirth = "01-01-1990"
-
-        await connection.manager.save(user);
-        console.log(' Test User has been saved.')
-
-      // TODO: Move this to another area
-    }).catch(error => {
-      console.log(error)
-    })
+      //TODO(peter): replace this with logging library.
+      console.log(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
+      createConnection(this.dbConnectionConfig)
+        .then(connection => { 
+          console.log(`Log: connected to ${this.dbConnectionConfig.database}`) 
+        })
+        .catch(error =>
+          console.log(error)
+        )
   }
 
   private mountRoutes (): void {
