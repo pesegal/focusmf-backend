@@ -8,8 +8,7 @@
     "start": "tsc && ts-node src/index.ts",
     "dev": "nodemon",
     "test": "jest",
-    "test:watch": "jest --watch",
-    "postinstall": "node-config-ts"
+    "test:watch": "jest --watch"
   },
   "jest": {
     "transform": {
