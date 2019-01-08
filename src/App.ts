@@ -1,48 +1,45 @@
 import 'reflect-metadata'
-import { createConnection, Connection } from "typeorm"
+import { createConnection, ConnectionOptions } from "typeorm"
 import express from 'express';
 import { User } from './models/entity/User';
+import config from 'config';
+import { connect } from 'net';
 
 class App {
   public express: express.Express
+  private dbConnectionConfig: ConnectionOptions
 
   constructor () {
+
+    // Load in the connection config information.
+    this.dbConnectionConfig = {
+      type: 'postgres',
+      host: config.get('host'),
+      port: config.get('port'),
+      username: config.get('username'),
+      password: config.get('password'),
+      database: config.get('database'),
+      synchronize: config.get('synchronize'),
+      entities: [   
+        __dirname + "/models/entity/*.ts"
+      ]
+    }
+
     this.initDatabaseConnection()
     this.express = express()
     this.mountRoutes()
   }
 
-  
   public initDatabaseConnection (): void {
-    console.log(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
-    createConnection({
-        type: "postgres",
-        host: "localhost",
-        port: 5432,
-        // TODO(Peter): Load these params from config file.
-        username: "focus",
-        password: "focus",
-        database: "focusmf",
-        entities: [
-          __dirname + "/models/entity/*.ts"
-        ],
-        synchronize: true
-    }).then(async connection => {
-        let user = new User();
-        user.email = 'test@test.com'
-        user.active = true
-        user.access = 'All'
-        user.first_name = 'Tester'
-        user.last_name = "McTesterson"
-        user.dateofbirth = "01-01-1990"
-
-        await connection.manager.save(user);
-        console.log(' Test User has been saved.')
-
-      // TODO: Move this to another area
-    }).catch(error => {
-      console.log(error)
-    })
+      //TODO(peter): replace this with logging library.
+      console.log(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
+      createConnection(this.dbConnectionConfig)
+        .then(connection => { 
+          console.log(`Log: connected to ${this.dbConnectionConfig.database}`) 
+        })
+        .catch(error =>
+          console.log(error)
+        )
   }
 
   private mountRoutes (): void {
