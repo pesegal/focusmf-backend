@@ -1,8 +1,11 @@
 {
-    "host": "localhost",
-    "port": 5432,
-    "username": "focus",
-    "password": "focus",
-    "database": "focusmf",
-    "synchronize": true
+    "dbSettings": {
+        "host": "localhost",
+        "port": 5432,
+        "username": "focus",
+        "password": "focus",
+        "database": "focusmf",
+        "synchronize": true
+    },
+    "port": "3000"
 }
