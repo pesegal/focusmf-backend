@@ -1,44 +1,57 @@
 import 'reflect-metadata'
 import { createConnection, ConnectionOptions } from "typeorm"
 import express from 'express';
-import { User } from './models/entity/User';
 import config from 'config';
-import { connect } from 'net';
+import winston from 'winston';
 
 class App {
   public express: express.Express
+  public logger: winston.Logger
   private dbConnectionConfig: ConnectionOptions
 
   constructor () {
+    // Init Logger
+    this.logger = this.createLogger()
 
     // Load in the connection config information.
     this.dbConnectionConfig = {
       type: 'postgres',
-      host: config.get('host'),
-      port: config.get('port'),
-      username: config.get('username'),
-      password: config.get('password'),
-      database: config.get('database'),
-      synchronize: config.get('synchronize'),
+      host: config.get('dbSettings.host'),
+      port: config.get('dbSettings.port'),
+      username: config.get('dbSettings.username'),
+      password: config.get('dbSettings.password'),
+      database: config.get('dbSettings.database'),
+      synchronize: config.get('dbSettings.synchronize'),
       entities: [   
         __dirname + "/models/entity/*.ts"
       ]
     }
-
     this.initDatabaseConnection()
+
+    // Init express server
     this.express = express()
     this.mountRoutes()
   }
 
-  public initDatabaseConnection (): void {
+  private createLogger (): winston.Logger {
+    return winston.createLogger({
+      level: 'info',
+      format: winston.format.cli(),
+      transports: [
+        new winston.transports.Console()
+      ]
+    })
+  }
+
+  private initDatabaseConnection (): void {
       //TODO(peter): replace this with logging library.
-      console.log(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
+      this.logger.info(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
       createConnection(this.dbConnectionConfig)
         .then(connection => { 
-          console.log(`Log: connected to ${this.dbConnectionConfig.database}`) 
+          this.logger.info(`Connected to database: ${this.dbConnectionConfig.database}.`) 
         })
         .catch(error =>
-          console.log(error)
+          this.logger.error(error)
         )
   }
 
@@ -53,4 +66,4 @@ class App {
   }
 }
 
-export default new App().express
+export default new App()

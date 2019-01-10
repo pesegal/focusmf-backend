@@ -1,10 +1,11 @@
-import app from './App'
+import App from './App'
+import config from 'config'
 
-const port = process.env.PORT || 3000
+const port = config.get('port') || 3000
 
-app.listen(port, (err: any) => {
+App.express.listen(port, (err: any) => {
   if (err) {
-    return console.log(err)
+    return App.logger.error(err)
   }
-  return console.log(`server is listening on ${port}`)
+  return App.logger.info(`Server is listening on ${port}.`)
 })
