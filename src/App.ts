@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { createConnection, ConnectionOptions } from "typeorm"
+import typeorm from "typeorm"
 import express from 'express';
 import config from 'config';
 import winston from 'winston';
@@ -7,7 +7,7 @@ import winston from 'winston';
 class App {
   public express: express.Express
   public logger: winston.Logger
-  private dbConnectionConfig: ConnectionOptions
+  private dbConnectionConfig: typeorm.ConnectionOptions
 
   constructor () {
     // Init Logger
@@ -30,6 +30,7 @@ class App {
 
     // Init express server
     this.express = express()
+    this.initMiddleWare()
     this.mountRoutes()
   }
 
@@ -46,13 +47,17 @@ class App {
   private initDatabaseConnection (): void {
       //TODO(peter): replace this with logging library.
       this.logger.info(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
-      createConnection(this.dbConnectionConfig)
+      typeorm.createConnection(this.dbConnectionConfig)
         .then(connection => { 
           this.logger.info(`Connected to database: ${this.dbConnectionConfig.database}.`) 
         })
         .catch(error =>
           this.logger.error(error)
         )
+  }
+
+  private initMiddleWare (): void {
+    this.express.use(express.json())
   }
 
   private mountRoutes (): void {
