@@ -13,6 +13,8 @@ export class Permission {
     @ManyToOne(type => User, user => user.permissions)
     user!: User
 
-    @Column()
+    @Column({
+        default: 'basic'
+    })
     permission!: string
 }
