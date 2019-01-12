@@ -1,12 +1,10 @@
 import express from 'express'
 import validateUser from '../models/validators/UserSchema'
 import { User } from '../models/entity/User'
-import App from './App'
-import { getRepository } from 'typeorm';
+import { getRepository } from 'typeorm'
 
 const routes = express.Router()
-const userRepository = App.co
-getRepository(User)
+const userRepository = getRepository(User)
 
 routes.get('/', async (req, res) => {
     res.json({})
