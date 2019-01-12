@@ -2,6 +2,7 @@ import { createConnection, ConnectionOptions } from "typeorm"
 import express from 'express';
 import config from 'config';
 import winston from 'winston';
+import expressWinston from 'express-winston'
 
 // Route Imports
 import health from './routes/health-check'
@@ -29,11 +30,17 @@ class App {
         __dirname + "/models/entity/*.ts"
       ]
     }
+
+    // TODO: Figure out how to await this finishing. Ask Clarkson!!
     this.initDatabaseConnection()
 
     // Init express server
     this.express = express()
     this.initMiddleWare()
+    if(config.get('logRequests') === true) {
+      this.logger.info('Logging HTTP Requests: true')
+      this.initRequestLogging()
+    }
     this.mountRoutes()
   }
 
@@ -45,6 +52,15 @@ class App {
         new winston.transports.Console()
       ]
     })
+  }
+
+  /**
+   * This function registers the winston logger defined in the :createLogger function
+   * and registers it as middleware on the express server. You can turn this on and off
+   * with the 'logRequests' configuration setting.
+   */
+  private initRequestLogging (): void {
+    this.express.use(expressWinston.logger(this.logger))
   }
 
   private initDatabaseConnection (): void {
