@@ -1,5 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, VersionColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, VersionColumn, OneToMany } from "typeorm"
+import { Permission } from "./Permission";
 
+/**
+ * The User entity stores user accounts, and is used for authentication and authorization procedures.
+ */
 @Entity()
 export class User {
     @PrimaryGeneratedColumn('uuid')
@@ -45,4 +49,7 @@ export class User {
         nullable: true
     })
     dateofbirth!: string
+
+    @OneToMany(type => Permission, permission => permission.user)
+    permissions!: Permission[]
 }
