@@ -5,7 +5,7 @@ import winston from 'winston';
 import expressWinston from 'express-winston'
 
 // Route Imports
-import health from './routes/health-check'
+import health from './routes/HealthCheck'
 
 
 class App {
