@@ -30,7 +30,7 @@ export class User {
     @Column({
         default: false
     })
-    active!: boolean
+    verified!: boolean
 
     @Column({
         nullable: true,
