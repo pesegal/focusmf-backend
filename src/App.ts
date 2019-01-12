@@ -32,6 +32,7 @@ class App {
     }
 
     // TODO: Figure out how to await this finishing. Ask Clarkson!!
+    // DOUBLE TODO: This is causing an error because connection hasn't been established.
     this.initDatabaseConnection()
 
     // Init express server
@@ -64,7 +65,6 @@ class App {
   }
 
   private initDatabaseConnection (): void {
-      //TODO(peter): replace this with logging library.
       this.logger.info(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
       createConnection(this.dbConnectionConfig)
         .then(connection => { 
