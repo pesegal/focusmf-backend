@@ -1,25 +1,48 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, VersionColumn } from "typeorm"
 
 @Entity()
 export class User {
     @PrimaryGeneratedColumn('uuid')
     id!: string; // ! ts non-null assertion operator, explicitly tell TS that these will be defined elseware.
 
-    @Column()
-    email!: string;
+    @CreateDateColumn()
+    created_date!: string
+
+    @UpdateDateColumn()
+    updated_date!: string
+
+    @VersionColumn()
+    version!: number
+
+    @Column({
+        length: 320,
+        unique: true
+    })
+    email!: string
 
     @Column()
-    active!: boolean;
+    password!: string
 
-    @Column()
-    access!: string;
+    @Column({
+        default: false
+    })
+    active!: boolean
 
-    @Column()
-    first_name!: string;
+    @Column({
+        nullable: true,
+        length: 120
+    })
+    first_name!: string
 
-    @Column()
-    last_name!: string;
+    @Column({
+        nullable: true,
+        length: 120        
+    })
+    last_name!: string
 
-    @Column("date")
-    dateofbirth!: string;
+    @Column({
+        type: "date",
+        nullable: true
+    })
+    dateofbirth!: string
 }
