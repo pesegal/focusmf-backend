@@ -1,12 +1,12 @@
-import { createConnection, ConnectionOptions } from "typeorm"
+import { createConnection, ConnectionOptions, Connection } from "typeorm"
 import express from 'express';
 import config from 'config';
-import winston from 'winston';
+import winston, { Logger } from 'winston';
 import expressWinston from 'express-winston'
 
 // Route Imports
 import health from './routes/HealthCheck'
-
+import userRoutes from './routes/User'
 
 class App {
   public express: express.Express
@@ -31,12 +31,16 @@ class App {
       ]
     }
 
+    this.express = express()
+    this.initalize()
     // TODO: Figure out how to await this finishing. Ask Clarkson!!
     // DOUBLE TODO: This is causing an error because connection hasn't been established.
-    this.initDatabaseConnection()
-
+  }
+  
+  private async initalize(): Promise<void>  {
+    await this.initDatabaseConnection()
+  
     // Init express server
-    this.express = express()
     this.initMiddleWare()
     if(config.get('logRequests') === true) {
       this.logger.info('Logging HTTP Requests: true')
@@ -64,15 +68,16 @@ class App {
     this.express.use(expressWinston.logger(this.logger))
   }
 
-  private initDatabaseConnection (): void {
+  private async initDatabaseConnection (): Promise<Connection> {
       this.logger.info(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
-      createConnection(this.dbConnectionConfig)
-        .then(connection => { 
-          this.logger.info(`Connected to database: ${this.dbConnectionConfig.database}.`) 
-        })
-        .catch(error =>
-          this.logger.error(error)
-        )
+      try {
+        const connection = await createConnection(this.dbConnectionConfig)
+        this.logger.info(`Connected to database: ${this.dbConnectionConfig.database}.`)
+        return connection
+      } catch(error) {
+        this.logger.error(error)
+        return error
+      }
   }
 
   private initMiddleWare (): void {
@@ -88,6 +93,7 @@ class App {
     })
     this.express.use('/', router)
     this.express.use('/health', health)
+    this.express.use('/user', userRoutes())
   }
 }
 
