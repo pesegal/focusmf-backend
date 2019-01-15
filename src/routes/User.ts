@@ -2,8 +2,11 @@ import express from 'express'
 import validateUser from '../models/validators/UserSchema'
 import { User } from '../models/entity/User'
 import { getRepository } from 'typeorm'
+import bcrypt from 'bcrypt'
+import App from '../App'
 
 export default () => {
+    const logger = App.logger
     const routes = express.Router()
     const userRepository = getRepository(User)
 
@@ -14,7 +17,9 @@ export default () => {
     routes.post('/', async (req, res) => {
         const { error, value } = validateUser(req.body)
         if (error) return res.status(400).send(error);
-        
+
+        // Salt and hash the password      
+
         const user = userRepository.create({
             email: value.email,
             password: value.password,
@@ -22,18 +27,17 @@ export default () => {
             last_name: value.lastName,
             dateofbirth: value.dateOfBirth        
         })
+
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
         
-        const response = await userRepository.save(user)
-        res.send(response)
-        
-        // let user = await User.findOne({ email: req.body.email });
-        // if (user) return res.status(400).send('User already registered.')
-        
-        // user = new User(_.pick(req.body, ['name', 'email', 'password']));
-        // const salt = await bcrypt.genSalt(10);
-        // user.password = await bcrypt.hash(user.password, salt);
-        
-        // await user.save();
+        try {
+            const response = await userRepository.save(user)
+            res.send(response)
+        } catch (error) {
+            logger.warn(error.message)
+            res.status(409).send(error.detail)
+        }
         
         // const token = user.generateAuthToken();
         // res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
