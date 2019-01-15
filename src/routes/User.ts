@@ -4,6 +4,7 @@ import { User } from '../models/entity/User'
 import { getRepository } from 'typeorm'
 import bcrypt from 'bcrypt'
 import App from '../App'
+import _ from 'lodash'
 
 export default () => {
     const logger = App.logger
@@ -33,8 +34,9 @@ export default () => {
         
         try {
             const response = await userRepository.save(user)
-            res.send(response)
+            res.send(_.pick(response, ["id", "email", "verified"]))
         } catch (error) {
+            // This will return an error when entity constraints are violated.
             logger.warn(error.message)
             res.status(409).send(error.detail)
         }
