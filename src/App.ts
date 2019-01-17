@@ -81,9 +81,12 @@ class App {
    * documentation which you find here: editor.swagger.io
    */
   private initSwaggerDocumentation (): void {
-    
+    // This removes the branded swagger topbar from the API docs.
+    const options = {
+      customCss: '.swagger-ui .topbar { display: none }'
+    }    
     const swaggerDoc = YAML.load(__dirname + '/../doc/swagger.yaml')
-    this.express.use('/apidoc', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
+    this.express.use('/api/doc', swaggerUi.serve, swaggerUi.setup(swaggerDoc, options))
   }
 
   /**
@@ -116,7 +119,7 @@ class App {
     })
     this.express.use('/', router)
     this.express.use('/health', health)
-    this.express.use('/user', userRoutes())
+    this.express.use('/api/user', userRoutes())
   }
 }
 
