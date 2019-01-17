@@ -1,0 +1,32 @@
+swagger: "2.0"
+
+info:
+  version: 1.0.0
+  title: Focus.MF API
+  description: Focus.mf api here is a new description.
+
+schemes:
+  - https
+host: simple.api
+basePath: /openapi101
+
+paths:
+  /user:
+    get:
+      summary: Gets some persons
+      description: Returns a list containing all persons.
+      responses:
+        200:
+          description: A list of Person
+          schema:
+            type: array
+            items:
+              required:
+                - username
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                username:
+                  type: string
