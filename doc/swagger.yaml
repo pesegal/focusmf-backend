@@ -7,12 +7,29 @@ info:
 
 schemes:
   - https
-host: simple.api
-basePath: /openapi101
+host: localhost:3000
+basePath: /v1/
+
+tags:
+- name: "Utility"
+  description: "All service utility functions"
+- name: "User"
+  description: "All user account functions"
 
 paths:
+  /health:
+    get:
+      tags:
+      - "Utility"
+      summary: Get service status
+      description: Returns the health status of the API service.
+      responses:
+        200:
+
   /user:
     get:
+      tags:
+      - "User"
       summary: Gets some persons
       description: Returns a list containing all persons.
       responses:
