@@ -86,7 +86,7 @@ class App {
       customCss: '.swagger-ui .topbar { display: none }'
     }    
     const swaggerDoc = YAML.load(__dirname + '/../doc/swagger.yaml')
-    this.express.use('/api/doc', swaggerUi.serve, swaggerUi.setup(swaggerDoc, options))
+    this.express.use('/apidoc', swaggerUi.serve, swaggerUi.setup(swaggerDoc, options))
   }
 
   /**
@@ -119,7 +119,7 @@ class App {
     })
     this.express.use('/', router)
     this.express.use('/health', health)
-    this.express.use('/api/user', userRoutes())
+    this.express.use('/user', userRoutes())
   }
 }
 
