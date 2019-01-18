@@ -1,5 +1,9 @@
 # Focus.MF Rest API
-This project is the backend services for the Focus.MF project.
+This project is the backend services for the Focus.MF project. The service hosts its own interactive API documentation at this endpoint:
+```
+/apidoc
+```
+
 ## Getting started:
 
 Install Node Version manager for easier management of node packages:
