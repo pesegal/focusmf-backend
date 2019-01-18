@@ -1,13 +1,12 @@
+# View focus.mf api docs at /apidoc
+# This file is watched by nodemon and can be live developed.
+# Spec: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md
 openapi: "3.0.2"
 
 info:
   version: 1.0.0
   title: Focus.MF API
   description: Focus.mf API supports the API commands for the focus.mf service.
-  # contact:
-  #   name: Focus.MF API
-  #   url: "https://focus.mf/api"
-  #   email: "focus@focus.mf"
 
 servers:
 - url: http://localhost:3000/
@@ -40,23 +39,80 @@ paths:
                     description: Returns 'UP' if the server is currently up and running.
 
   /user:
-    get:
+    post:
       tags:
       - "User"
-      summary: Gets some persons
-      description: Returns a list containing all persons.
+      summary: Creates a new user account. 
+      description: Creates a new user account in the database. Uniqueness in enforced on email.
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+      
       responses:
         200:
-          description: A list of Person
-          schema:
-            type: array
-            items:
-              required:
-                - username
-              properties:
-                firstName:
-                  type: string
-                lastName:
-                  type: string
-                username:
-                  type: string
+          # TODO: Auth token header once implemented.
+          description: Information on successfully created user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createUserResponse'
+        409:
+          description: Returned when duplicate email is submitted.
+          content:
+            # Replace this with a universal Error schema?
+            text/plain:
+              schema:
+                type: string
+                description: Duplicate email error message
+
+components:
+  schemas:
+    createUser:
+      title: Create new user body
+      type: object
+      required:
+      - email
+      - password
+      properties:
+        email: 
+          type: string
+          description: Users email address, needs to be unique.
+          example: test@test.com
+          maxLength: 320
+          minLength: 6
+        password:
+          type: string
+          format: password
+          description: Users password
+          example: test1Password!
+          maxLength: 50
+          minLength: 8
+        firstName:
+          type: string
+          description: Users first name
+          maxLength: 50
+        lastName:
+          type: string
+          description: Users last name
+          maxLength: 50
+        dateOfBirth:
+          type: string
+          format: date
+          description: Users date of birth
+    createUserResponse:
+      title: Returned after successful createUser
+      type: object
+      properties:
+        id:
+          type: string
+          description: Users unique id
+        email:
+          type: string
+          description: Users email
+        verified:
+          type: boolean
+          description: Current account verification state
