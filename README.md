@@ -27,10 +27,10 @@ npm install
 Initialize the local development database. This will create the initial databases and user accounts needed to do local development on the project. In the projects root directory run:
 
 ```bash
-Linux:
+# Linux
 sudo -su postgres psql --echo-all --file=init-config.sql
 
-Mac:
+# Mac
 psql postgres --echo-all --file=init-config.sql
 ```
 

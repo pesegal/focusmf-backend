@@ -2,6 +2,7 @@ import express from 'express'
 import validateUser from '../models/validators/UserSchema'
 import { User } from '../models/entity/User'
 import { getRepository } from 'typeorm'
+import { Permission } from '../models/entity/Permission'
 import bcrypt from 'bcrypt'
 import App from '../App'
 import _ from 'lodash'
@@ -10,6 +11,7 @@ export default () => {
     const logger = App.logger
     const routes = express.Router()
     const userRepository = getRepository(User)
+    const permissionRepository = getRepository(Permission)
 
     routes.get('/', async (req, res) => {
         res.json({})
@@ -34,6 +36,10 @@ export default () => {
         
         try {
             const response = await userRepository.save(user)
+            // Set default permission for user.
+            const defaultPermission = new Permission()
+            defaultPermission.user = response
+            await permissionRepository.save(defaultPermission)
             res.send(_.pick(response, ["id", "email", "verified"]))
         } catch (error) {
             // This will return an error when entity constraints are violated.
