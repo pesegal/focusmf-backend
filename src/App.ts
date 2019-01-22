@@ -4,9 +4,14 @@ import config from 'config';
 import winston, { Logger } from 'winston';
 import expressWinston from 'express-winston'
 
+// Api Documentation Imports
+import swaggerUi from 'swagger-ui-express'
+import YAML from 'yamljs'
+
 // Route Imports
 import health from './routes/HealthCheck'
 import userRoutes from './routes/User'
+
 
 class App {
   public express: express.Express
@@ -47,6 +52,7 @@ class App {
       this.initRequestLogging()
     }
     this.mountRoutes()
+    this.initSwaggerDocumentation()
   }
 
   private createLogger (): winston.Logger {
@@ -68,6 +74,26 @@ class App {
     this.express.use(expressWinston.logger(this.logger))
   }
 
+  /**
+   * This function initializes swagger API documentation. To edit / update the swagger
+   * documentation modify the swagger.yaml file in the documentation folder. There is 
+   * a good live editor tool called 'Swagger Editor' that can assist with writing API 
+   * documentation which you find here: editor.swagger.io
+   */
+  private initSwaggerDocumentation (): void {
+    // This removes the branded swagger topbar from the API docs.
+    const options = {
+      customCss: '.swagger-ui .topbar { display: none }'
+    }    
+    const swaggerDoc = YAML.load(__dirname + '/../doc/swagger.yaml')
+    this.express.use('/apidoc', swaggerUi.serve, swaggerUi.setup(swaggerDoc, options))
+  }
+
+  /**
+   * This function initialized the database connection with typeORM. The create connection
+   * is registered in the global namespace once complete and is used by typeORM
+   * specific methods to get entity managers and repository objects.  
+   */
   private async initDatabaseConnection (): Promise<Connection> {
       this.logger.info(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
       try {

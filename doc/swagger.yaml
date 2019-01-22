@@ -1,0 +1,122 @@
+# View focus.mf api docs at /apidoc
+# This file is watched by nodemon and can be live developed.
+# Spec: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md
+openapi: "3.0.2"
+
+info:
+  version: 1.0.0
+  title: Focus.MF API
+  description: Focus.mf API supplies the functionality for the focus.mf webapp.
+
+servers:
+- url: http://localhost:3000/
+  description: Local development
+
+tags:
+- name: "Utility"
+  description: "All service utility endpoints"
+- name: "User"
+  description: "All user account endpoints"
+
+paths:
+  /health:
+    get:
+      tags:
+      - "Utility"
+      summary: Get service status
+      description: Returns the health status of the API service.
+      responses:
+        200:
+          description: Backend service health status
+          content:
+            application/json:
+              schema:
+                title: Sample
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Returns 'UP' if the server is currently up and running.
+
+  /user:
+    get:
+      tags:
+      - "User"
+      summary: todo
+    post:
+      tags:
+      - "User"
+      summary: Creates a new user account. 
+      description: Creates a new user account in the database. Uniqueness in enforced on email.
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+      
+      responses:
+        200:
+          # TODO: Auth token header once implemented.
+          description: Information on successfully created user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createUserResponse'
+        409:
+          description: Returned when duplicate email is submitted.
+          content:
+            # Replace this with a universal Error schema?
+            text/plain:
+              schema:
+                type: string
+                description: Duplicate email error message
+
+components:
+  schemas:
+    createUser:
+      title: Create User Request
+      type: object
+      required:
+      - email
+      - password
+      properties:
+        email: 
+          type: string
+          description: Users email address, needs to be unique.
+          example: test@test.com
+          maxLength: 320
+          minLength: 6
+        password:
+          type: string
+          format: password
+          description: Users password
+          example: test1Password!
+          maxLength: 50
+          minLength: 8
+        firstName:
+          type: string
+          description: Users first name
+          maxLength: 50
+        lastName:
+          type: string
+          description: Users last name
+          maxLength: 50
+        dateOfBirth:
+          type: string
+          format: date
+          description: Users date of birth
+    createUserResponse:
+      title: Create User Response
+      type: object
+      properties:
+        id:
+          type: string
+          description: Users unique id
+        email:
+          type: string
+          description: Users email
+        verified:
+          type: boolean
+          description: Current account verification state

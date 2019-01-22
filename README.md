@@ -1,5 +1,9 @@
 # Focus.MF Rest API
-This project is the backend services for the Focus.MF project.
+This project is the backend services for the Focus.MF project. The service hosts its own interactive API documentation at this endpoint:
+```
+/apidoc
+```
+
 ## Getting started:
 
 Install Node Version manager for easier management of node packages:
@@ -23,10 +27,10 @@ npm install
 Initialize the local development database. This will create the initial databases and user accounts needed to do local development on the project. In the projects root directory run:
 
 ```bash
-Linux:
+# Linux
 sudo -su postgres psql --echo-all --file=init-config.sql
 
-Mac:
+# Mac
 psql postgres --echo-all --file=init-config.sql
 ```
 

@@ -38,7 +38,9 @@
     "@types/joi": "^14.0.1",
     "@types/lodash": "^4.14.119",
     "@types/node": "^10.12.18",
+    "@types/swagger-ui-express": "^3.0.0",
     "@types/winston": "^2.4.4",
+    "@types/yamljs": "^0.2.30",
     "jest": "^23.6.0",
     "nodemon": "^1.18.9",
     "ts-jest": "^23.10.5",
@@ -55,7 +57,9 @@
     "lodash": "^4.17.11",
     "pg": "^7.7.1",
     "reflect-metadata": "^0.1.12",
+    "swagger-ui-express": "^4.0.2",
     "typeorm": "^0.2.9",
-    "winston": "^3.1.0"
+    "winston": "^3.1.0",
+    "yamljs": "^0.3.0"
   }
 }
