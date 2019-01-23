@@ -8,5 +8,6 @@
         "synchronize": true
     },
     "port": "3000",
-    "logRequests": true
+    "logRequests": true,
+    "jwtPrivateKey": ""
 }
