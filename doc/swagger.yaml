@@ -64,6 +64,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/createUserResponse'
+          headers:
+            x-auth-token:
+              type: "string"
+              description: "User's JWT authorization token."
         409:
           description: Returned when duplicate email is submitted.
           content:
