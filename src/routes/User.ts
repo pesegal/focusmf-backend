@@ -40,7 +40,8 @@ export default () => {
             const defaultPermission = new Permission()
             defaultPermission.user = response
             await permissionRepository.save(defaultPermission)
-            const token = response.generateAuthToken([defaultPermission.permission])
+            response.permissions = [defaultPermission]
+            const token = response.generateAuthToken()
             res.header('x-auth-token', token).send(_.pick(response, ["id", "email", "verified"]))
         } catch (error) {
             // This will return an error when entity constraints are violated.
@@ -48,8 +49,6 @@ export default () => {
             res.status(409).send(error.detail)
         }
         
-        // const token = user.generateAuthToken();
-        // res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
     })
     return routes
 }

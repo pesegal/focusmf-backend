@@ -56,8 +56,9 @@ export class User {
     @OneToMany(type => Permission, permission => permission.user)
     permissions!: Permission[]
 
-    public generateAuthToken(permissions: string[]): string {
-        const token = jwt.sign({id: this.id, per: permissions}, config.get("jwtPrivateKey"))
+    public generateAuthToken(): string {
+        const permissionStrings = this.permissions.map(p => p.permission)
+        const token = jwt.sign({id: this.id, per: permissionStrings}, config.get("jwtPrivateKey"))
         return token
     }
 }
