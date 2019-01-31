@@ -53,7 +53,7 @@ export class User {
     })
     dateofbirth!: string
 
-    @OneToMany(type => Permission, permission => permission.user)
+    @OneToMany(type => Permission, permission => permission.user, { eager: true })
     permissions!: Permission[]
 
     public generateAuthToken(): string {

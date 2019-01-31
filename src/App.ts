@@ -11,6 +11,7 @@ import YAML from 'yamljs'
 // Route Imports
 import health from './routes/HealthCheck'
 import userRoutes from './routes/User'
+import authRoutes from './routes/Auth'
 
 
 class App {
@@ -58,7 +59,7 @@ class App {
 
   private createLogger (): winston.Logger {
     return winston.createLogger({
-      level: 'info',
+      level: config.get("logLevel"),
       format: winston.format.cli(),
       transports: [
         new winston.transports.Console()
@@ -127,6 +128,7 @@ class App {
     this.express.use('/', router)
     this.express.use('/health', health)
     this.express.use('/user', userRoutes())
+    this.express.use('/login', authRoutes())
   }
 }
 
