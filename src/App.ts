@@ -108,6 +108,9 @@ class App {
       }
   }
 
+  /**
+   * This confirms that a jwtPrivateKey environment variable is set otherwise fail to start the backend service.
+   */
   private validateJwtKeySet (): void {
     if (!config.get('jwtPrivateKey')) {
       throw new Error("jwtPrivateKey not set. Set it with environment var 'focusmf_jwtPrivateKey'.")

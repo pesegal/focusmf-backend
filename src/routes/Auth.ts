@@ -4,6 +4,7 @@ import { User } from '../models/entity/User'
 import validate from '../models/validators/UserSchema'
 import bcrypt from 'bcrypt'
 import { getRepository } from 'typeorm';
+import _ from 'lodash'
 
 export default () => {
     const logger = App.logger
@@ -16,7 +17,7 @@ export default () => {
      */
     routes.post('/', async (req, res) => {
         const { error, value } = validate(req.body)
-        if (error) return res.status(400).send(error)
+        if (error) return res.status(400).send({ errorMsg: `${error.name}: ${error.message}` })
         try {
             const user = await userRepository.findOneOrFail({ email: value.email })
             const validPassword = await bcrypt.compare(value.password, user.password)

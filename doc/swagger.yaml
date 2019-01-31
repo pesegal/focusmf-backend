@@ -58,7 +58,6 @@ paths:
       
       responses:
         200:
-          # TODO: Auth token header once implemented.
           description: Information on successfully created user
           content:
             application/json:
@@ -76,7 +75,32 @@ paths:
               schema:
                 type: string
                 description: Duplicate email error message
-
+    
+  /login:
+    post:
+      tags:
+      - "User"
+      summary: Validates's the user's email and password and returns authorizatrion token upon successful authentication.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginCredentials'
+      responses:
+        200:
+          description: Authorization token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/loginResponse'
+        400:
+          description: Returned when there is an error with the login request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorMsg'
+              
 components:
   schemas:
     createUser:
@@ -111,6 +135,7 @@ components:
           type: string
           format: date
           description: Users date of birth
+
     createUserResponse:
       title: Create User Response
       type: object
@@ -124,3 +149,31 @@ components:
         verified:
           type: boolean
           description: Current account verification state
+
+    loginCredentials:
+      title: Login credentials
+      type: object
+      properties:
+        email:
+          type: string
+          description: Users email address
+        password:
+          type: string
+          description: Users password
+
+    loginResponse:
+      title: Login response
+      type: object
+      properties:
+        authToken:
+          type: string
+          description: JWT authorization token
+    
+    errorMsg:
+      title: Error message
+      type: object
+      properties:
+        errorMsg:
+          type: string
+          description: Error message 
+    
