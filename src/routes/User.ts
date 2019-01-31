@@ -19,7 +19,7 @@ export default () => {
     
     routes.post('/', async (req, res) => {
         const { error, value } = validateUser(req.body)
-        if (error) return res.status(400).send(error);
+        if (error) return res.status(400).send({ errorMsg: `${error.message}` });
 
         // Salt and hash the password      
 
@@ -46,7 +46,7 @@ export default () => {
         } catch (error) {
             // This will return an error when entity constraints are violated.
             logger.warn(error.message)
-            res.status(409).send(error.detail)
+            res.status(409).send({ errorMsg: error.detail })
         }
         
     })

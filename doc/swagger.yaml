@@ -43,6 +43,7 @@ paths:
       tags:
       - "User"
       summary: todo
+      
     post:
       tags:
       - "User"
@@ -70,11 +71,9 @@ paths:
         409:
           description: Returned when duplicate email is submitted.
           content:
-            # Replace this with a universal Error schema?
-            text/plain:
+            application/json:
               schema:
-                type: string
-                description: Duplicate email error message
+                $ref: '#/components/schemas/errorMsg'         
     
   /login:
     post:
