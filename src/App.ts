@@ -36,7 +36,7 @@ class App {
       password: config.get('dbSettings.password'),
       database: config.get('dbSettings.database'),
       synchronize: config.get('dbSettings.synchronize'),
-      entities: [   
+      entities: [
         __dirname + "/models/entity/*.ts"
       ]
     }
@@ -46,10 +46,10 @@ class App {
     // TODO: Figure out how to await this finishing. Ask Clarkson!!
     // DOUBLE TODO: This is causing an error because connection hasn't been established.
   }
-  
+
   private async initalize(): Promise<void>  {
     await this.initDatabaseConnection()
-  
+
     // Init express server
     this.initMiddleWare()
     if(config.get('logRequests') === true) {
@@ -81,15 +81,15 @@ class App {
 
   /**
    * This function initializes swagger API documentation. To edit / update the swagger
-   * documentation modify the swagger.yaml file in the documentation folder. There is 
-   * a good live editor tool called 'Swagger Editor' that can assist with writing API 
+   * documentation modify the swagger.yaml file in the documentation folder. There is
+   * a good live editor tool called 'Swagger Editor' that can assist with writing API
    * documentation which you find here: editor.swagger.io
    */
   private initSwaggerDocumentation (): void {
     // This removes the branded swagger topbar from the API docs.
     const options = {
       customCss: '.swagger-ui .topbar { display: none }'
-    }    
+    }
     const swaggerDoc = YAML.load(__dirname + '/../doc/swagger.yaml')
     this.express.use('/apidoc', swaggerUi.serve, swaggerUi.setup(swaggerDoc, options))
   }
@@ -97,7 +97,7 @@ class App {
   /**
    * This function initialized the database connection with typeORM. The create connection
    * is registered in the global namespace once complete and is used by typeORM
-   * specific methods to get entity managers and repository objects.  
+   * specific methods to get entity managers and repository objects.
    */
   private async initDatabaseConnection (): Promise<Connection> {
       this.logger.info(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
