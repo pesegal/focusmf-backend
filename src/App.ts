@@ -8,6 +8,9 @@ import expressWinston from 'express-winston'
 import swaggerUi from 'swagger-ui-express'
 import YAML from 'yamljs'
 
+// Middleware
+import headersMiddleware from './middleware/headers'
+
 // Route Imports
 import health from './routes/HealthCheck'
 import userRoutes from './routes/User'
@@ -128,6 +131,9 @@ class App {
         message: config.get('jwtPrivateKey')
       })
     })
+
+    this.express.use(headersMiddleware())
+
     this.express.use('/', router)
     this.express.use('/health', health)
     this.express.use('/user', userRoutes())
