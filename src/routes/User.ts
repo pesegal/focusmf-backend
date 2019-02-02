@@ -19,7 +19,7 @@ export default () => {
     
     routes.post('/', async (req, res) => {
         const { error, value } = validateUser(req.body)
-        if (error) return res.status(400).send(error);
+        if (error) return res.status(400).send({ errorMsg: `${error.message}` });
 
         // Salt and hash the password      
 
@@ -40,15 +40,15 @@ export default () => {
             const defaultPermission = new Permission()
             defaultPermission.user = response
             await permissionRepository.save(defaultPermission)
-            res.send(_.pick(response, ["id", "email", "verified"]))
+            response.permissions = [defaultPermission]
+            const token = response.generateAuthToken()
+            res.header('x-auth-token', token).send(_.pick(response, ["id", "email", "verified"]))
         } catch (error) {
             // This will return an error when entity constraints are violated.
             logger.warn(error.message)
-            res.status(409).send(error.detail)
+            res.status(409).send({ errorMsg: error.detail })
         }
         
-        // const token = user.generateAuthToken();
-        // res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
     })
     return routes
 }

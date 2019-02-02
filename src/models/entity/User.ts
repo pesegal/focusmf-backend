@@ -1,5 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, VersionColumn, OneToMany } from "typeorm"
-import { Permission } from "./Permission";
+import { Permission } from "./Permission"
+import jwt from "jsonwebtoken"
+import config from "config"
+
 
 /**
  * The User entity stores user accounts, and is used for authentication and authorization procedures.
@@ -50,6 +53,12 @@ export class User {
     })
     dateofbirth!: string
 
-    @OneToMany(type => Permission, permission => permission.user)
+    @OneToMany(type => Permission, permission => permission.user, { eager: true })
     permissions!: Permission[]
+
+    public generateAuthToken(): string {
+        const permissionStrings = this.permissions.map(p => p.permission)
+        const token = jwt.sign({id: this.id, per: permissionStrings}, config.get("jwtPrivateKey"))
+        return token
+    }
 }

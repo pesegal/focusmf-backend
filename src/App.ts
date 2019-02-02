@@ -11,6 +11,7 @@ import YAML from 'yamljs'
 // Route Imports
 import health from './routes/HealthCheck'
 import userRoutes from './routes/User'
+import authRoutes from './routes/Auth'
 
 
 class App {
@@ -21,6 +22,7 @@ class App {
   constructor () {
     // Init Logger
     this.logger = this.createLogger()
+    this.validateJwtKeySet()
 
     // Load in the connection config information.
     this.dbConnectionConfig = {
@@ -57,7 +59,7 @@ class App {
 
   private createLogger (): winston.Logger {
     return winston.createLogger({
-      level: 'info',
+      level: config.get("logLevel"),
       format: winston.format.cli(),
       transports: [
         new winston.transports.Console()
@@ -106,6 +108,15 @@ class App {
       }
   }
 
+  /**
+   * This confirms that a jwtPrivateKey environment variable is set otherwise fail to start the backend service.
+   */
+  private validateJwtKeySet (): void {
+    if (!config.get('jwtPrivateKey')) {
+      throw new Error("jwtPrivateKey not set. Set it with environment var 'focusmf_jwtPrivateKey'.")
+    }
+  }
+
   private initMiddleWare (): void {
     this.express.use(express.json())
   }
@@ -114,12 +125,13 @@ class App {
     const router = express.Router()
     router.get('/', (req, res) => {
       res.json({
-        message: 'Hello World!'
+        message: config.get('jwtPrivateKey')
       })
     })
     this.express.use('/', router)
     this.express.use('/health', health)
     this.express.use('/user', userRoutes())
+    this.express.use('/login', authRoutes())
   }
 }
 
