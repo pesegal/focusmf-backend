@@ -1,8 +1,7 @@
 import Joi from 'joi'
 
 /**
- * Defines the User JSON structure for creating user accounts
- * and logging in.
+ * Basic inteface for creating a new user and logging in.
  */
 interface User {
     email: string
