@@ -60,6 +60,11 @@ npm run test
 npm run test:watch
 ```
 
+## Deployment Notes
+Make sure you run this service with the `NODE_ENV=prod` set so that the application will correctly validate the jwtSecretKey environment variable.
+
+See the `config/custom-environment-variables.json` file for exposed environment variables for deployment.
+
 ## Database Persistance
 
 The backend API uses a postgres relational database for persistance using TypeORM object relational mapper for modeling entities. To set up a development environment you will need to do the inital set up of the database. See getting started section. In development mode typeORM is has syncronize mode turned on which will automatically re-create entity schemas. This can cause data to be wiped out.

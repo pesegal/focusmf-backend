@@ -26,6 +26,7 @@ class App {
     // Init Logger
     this.logger = this.createLogger()
     this.validateJwtKeySet()
+    this.logger.info(`NODE_ENV: ${config.util.getEnv('NODE_ENV')}`)
 
     // Load in the connection config information.
     this.dbConnectionConfig = {
@@ -43,10 +44,12 @@ class App {
 
     this.express = express()
     this.initalize()
-    // TODO: Figure out how to await this finishing. Ask Clarkson!!
-    // DOUBLE TODO: This is causing an error because connection hasn't been established.
   }
 
+  /**
+   * This method is to allow for async init order to complete correctly make sure that the database
+   * finishes starting up before the rest of the app initializes.
+   */
   private async initalize(): Promise<void>  {
     await this.initDatabaseConnection()
 
@@ -60,6 +63,9 @@ class App {
     this.initSwaggerDocumentation()
   }
 
+  /**
+   * Initialize the application logger. Will be avaiable through the App.logger property
+   */
   private createLogger (): winston.Logger {
     return winston.createLogger({
       level: config.get("logLevel"),
@@ -115,16 +121,22 @@ class App {
    * This confirms that a jwtPrivateKey environment variable is set otherwise fail to start the backend service.
    */
   private validateJwtKeySet (): void {
-    if (!config.get('jwtPrivateKey')) {
+    if (config.util.getEnv('NODE_ENV') === 'prod' && config.get('jwtPrivateKey') === 'devJwtKey') {
       throw new Error("jwtPrivateKey not set. Set it with environment var 'focusmf_jwtPrivateKey'.")
     }
   }
 
+  /**
+   * Registers all of the middleware functions needed by the application.
+   */
   private initMiddleWare (): void {
     this.express.use(express.json())
     this.express.use(headersMiddleware())
   }
 
+  /**
+   * Registers all of the routers with the express server.
+   */
   private mountRoutes (): void {
     const router = express.Router()
     router.get('/', (req, res) => {

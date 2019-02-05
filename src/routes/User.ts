@@ -13,15 +13,19 @@ export default () => {
     const userRepository = getRepository(User)
     const permissionRepository = getRepository(Permission)
 
-    routes.get('/', async (req, res) => {
+    /**
+     * Get current users information.
+     */
+    routes.get('/me', async (req, res) => {
         res.json({})
     })
     
+    /**
+     * Create a new user account in the system 
+     */
     routes.post('/', async (req, res) => {
         const { error, value } = validateUser(req.body)
         if (error) return res.status(400).send({ errorMsg: `${error.message}` });
-
-        // Salt and hash the password      
 
         const user = userRepository.create({
             email: value.email,
@@ -44,7 +48,6 @@ export default () => {
             const token = response.generateAuthToken()
             res.header('x-auth-token', token).send(_.pick(response, ["id", "email", "verified"]))
         } catch (error) {
-            // This will return an error when entity constraints are violated.
             logger.warn(error.message)
             res.status(409).send({ errorMsg: error.detail })
         }

@@ -10,5 +10,5 @@
     "port": "3000",
     "logRequests": true,
     "logLevel": "debug",
-    "jwtPrivateKey": ""
+    "jwtPrivateKey": "devJwtKey"
 }
