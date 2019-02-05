@@ -122,6 +122,7 @@ class App {
 
   private initMiddleWare (): void {
     this.express.use(express.json())
+    this.express.use(headersMiddleware())
   }
 
   private mountRoutes (): void {
@@ -131,8 +132,6 @@ class App {
         message: config.get('jwtPrivateKey')
       })
     })
-
-    this.express.use(headersMiddleware())
 
     this.express.use('/', router)
     this.express.use('/health', health)
