@@ -8,6 +8,9 @@ import expressWinston from 'express-winston'
 import swaggerUi from 'swagger-ui-express'
 import YAML from 'yamljs'
 
+// Middleware
+import headersMiddleware from './middleware/headers'
+
 // Route Imports
 import health from './routes/HealthCheck'
 import userRoutes from './routes/User'
@@ -42,14 +45,14 @@ class App {
     this.express = express()
     this.initalize()
   }
-  
+
   /**
-   * This method is to allow for async init order to complete correctly make sure that the database 
+   * This method is to allow for async init order to complete correctly make sure that the database
    * finishes starting up before the rest of the app initializes.
    */
   private async initalize(): Promise<void>  {
     await this.initDatabaseConnection()
-  
+
     // Init express server
     this.initMiddleWare()
     if(config.get('logRequests') === true) {
@@ -84,15 +87,15 @@ class App {
 
   /**
    * This function initializes swagger API documentation. To edit / update the swagger
-   * documentation modify the swagger.yaml file in the documentation folder. There is 
-   * a good live editor tool called 'Swagger Editor' that can assist with writing API 
+   * documentation modify the swagger.yaml file in the documentation folder. There is
+   * a good live editor tool called 'Swagger Editor' that can assist with writing API
    * documentation which you find here: editor.swagger.io
    */
   private initSwaggerDocumentation (): void {
     // This removes the branded swagger topbar from the API docs.
     const options = {
       customCss: '.swagger-ui .topbar { display: none }'
-    }    
+    }
     const swaggerDoc = YAML.load(__dirname + '/../doc/swagger.yaml')
     this.express.use('/apidoc', swaggerUi.serve, swaggerUi.setup(swaggerDoc, options))
   }
@@ -100,7 +103,7 @@ class App {
   /**
    * This function initialized the database connection with typeORM. The create connection
    * is registered in the global namespace once complete and is used by typeORM
-   * specific methods to get entity managers and repository objects.  
+   * specific methods to get entity managers and repository objects.
    */
   private async initDatabaseConnection (): Promise<Connection> {
       this.logger.info(`Scanning for entities: ${__dirname}/models/entity/*`)
@@ -128,6 +131,7 @@ class App {
    */
   private initMiddleWare (): void {
     this.express.use(express.json())
+    this.express.use(headersMiddleware())
   }
 
   /**
@@ -140,6 +144,7 @@ class App {
         message: config.get('jwtPrivateKey')
       })
     })
+
     this.express.use('/', router)
     this.express.use('/health', health)
     this.express.use('/user', userRoutes())
