@@ -34,7 +34,7 @@ class App {
       database: config.get('dbSettings.database'),
       synchronize: config.get('dbSettings.synchronize'),
       entities: [   
-        __dirname + "/models/entity/*.ts"
+        __dirname + "/models/entity/*"
       ]
     }
 
@@ -97,7 +97,7 @@ class App {
    * specific methods to get entity managers and repository objects.  
    */
   private async initDatabaseConnection (): Promise<Connection> {
-      this.logger.info(`Scanning for entities: ${__dirname}/models/entity/*.ts`)
+      this.logger.info(`Scanning for entities: ${__dirname}/models/entity/*`)
       try {
         const connection = await createConnection(this.dbConnectionConfig)
         this.logger.info(`Connected to database: ${this.dbConnectionConfig.database}.`)
