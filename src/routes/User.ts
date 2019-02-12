@@ -3,9 +3,11 @@ import validateUser from '../models/validators/UserSchema'
 import { User } from '../models/entity/User'
 import { getRepository } from 'typeorm'
 import { Permission } from '../models/entity/Permission'
+import auth from '../middleware/auth'
 import bcrypt from 'bcrypt'
 import App from '../App'
 import _ from 'lodash'
+
 
 export default () => {
     const logger = App.logger
@@ -16,8 +18,9 @@ export default () => {
     /**
      * Get current users information.
      */
-    routes.get('/me', async (req, res) => {
-        res.json({})
+    routes.get('/', auth, async (req, res) => {
+        const user = await userRepository.findOne({ id: res.locals.authData.id })
+        res.send(_.pick(user, ['id', 'email', 'first_name', 'last_name', 'dateofbirth']))
     })
     
     /**

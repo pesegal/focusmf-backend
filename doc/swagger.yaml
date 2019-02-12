@@ -42,8 +42,38 @@ paths:
     get:
       tags:
       - "User"
-      summary: todo
+      summary: Returns user's information.
+      description: Returns current authorized user's information.
+      operationId: me
+      parameters:
+      - in: header
+        name: x-auth-token
+        schema:
+          type: string
+          format: jwt
+        required: true
       
+      responses:
+        200:
+          description: Current authorized users information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userData'
+
+        400:
+          description: Token is invalid.
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/errorMsg'
+        401:
+          description: No token sent.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorMsg'
+
     post:
       tags:
       - "User"
@@ -102,6 +132,33 @@ paths:
               
 components:
   schemas:
+    userData:
+      title: Current User's Information
+      type: object
+      properties:
+        id:
+          type: string
+          description: Users id.
+          format: uuid
+        email: 
+          type: string
+          description: Users email address.
+          example: test@test.com
+          maxLength: 320
+          minLength: 6
+        firstName:
+          type: string
+          description: Users first name
+          maxLength: 50
+        lastName:
+          type: string
+          description: Users last name
+          maxLength: 50
+        dateOfBirth:
+          type: string
+          format: date
+          description: Users date of birth
+
     createUser:
       title: Create User Request
       type: object
