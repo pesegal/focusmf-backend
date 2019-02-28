@@ -8,14 +8,6 @@ import expressWinston from 'express-winston'
 import swaggerUi from 'swagger-ui-express'
 import YAML from 'yamljs'
 
-// Middleware
-import headersMiddleware from './middleware/headers'
-
-// Route Imports
-import health from './routes/HealthCheck'
-import userRoutes from './routes/User'
-import authRoutes from './routes/Auth'
-
 
 class App {
   public express: express.Express
@@ -131,7 +123,7 @@ class App {
    */
   private initMiddleWare (): void {
     this.express.use(express.json())
-    this.express.use(headersMiddleware())
+    // this.express.use(headersMiddleware())
   }
 
   /**
@@ -145,10 +137,10 @@ class App {
       })
     })
 
-    this.express.use('/', router)
-    this.express.use('/health', health)
-    this.express.use('/user', userRoutes())
-    this.express.use('/login', authRoutes())
+    // this.express.use('/', router)
+    // this.express.use('/health', health)
+    // this.express.use('/user', userRoutes())
+    // this.express.use('/login', authRoutes())
   }
 }
 
