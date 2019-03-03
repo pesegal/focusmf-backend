@@ -5,10 +5,12 @@ import { Container } from "typedi"
 import * as TypeOrm from "typeorm"
 import * as TypeGraphQL from "type-graphql"
 import { ApolloServer } from "apollo-server"
-import { HelloWorldResolver } from "./resolvers/helloworld"
+import { HelloWorldResolver } from "./resolvers/HelloWorld"
+import { UserResolver } from "./resolvers/UserResolver";
 
-// Register the dependency injection container with typeORM.
+// Register the dependency injection container with typeORM & typeGraphQL
 TypeOrm.useContainer(Container)
+TypeGraphQL.useContainer(Container)
 
 async function startup() {
   console.log("Startup")
@@ -32,7 +34,7 @@ async function startup() {
     await TypeOrm.createConnection(dbConnectionConfig)
 
     const schema = await TypeGraphQL.buildSchema({
-      resolvers: [HelloWorldResolver]
+      resolvers: [HelloWorldResolver, UserResolver]
     })
 
     const server = new ApolloServer({
