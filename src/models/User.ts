@@ -10,7 +10,7 @@ import fieldConfig from "graphql-query-complexity/dist/estimators/fieldConfig";
  * The User entity stores user accounts, and is used for authentication and authorization procedures.
  */
 @Entity()
-@ObjectType({ description: "A Focus.mf User."})
+@ObjectType({ description: "A Focus.mf User." })
 export class User {
     @Field(type => ID)
     @PrimaryGeneratedColumn('uuid')
@@ -25,7 +25,7 @@ export class User {
     @VersionColumn()
     version!: number
     
-    @Field()
+    @Field({ description: "The users email. Standard email requirements." })
     @Column({
         length: 320,
         unique: true
