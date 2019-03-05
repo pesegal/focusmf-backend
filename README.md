@@ -1,8 +1,5 @@
 # Focus.MF Rest API
-This project is the backend services for the Focus.MF project. The service hosts its own interactive API documentation at this endpoint:
-```
-/apidoc
-```
+This project is the backend services for the Focus.MF project. The service hosts a graphql playground instance at it's root.
 
 ## Getting started:
 
