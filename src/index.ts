@@ -12,8 +12,11 @@ import { UserResolver } from "./resolvers/UserResolver";
 TypeOrm.useContainer(Container)
 TypeGraphQL.useContainer(Container)
 
+/**
+ * This function initializes the database, server, and logger.
+ */
 async function startup() {
-  console.log("Startup")
+  console.log("Startup") // TODO: ADD WINSTON LOGGER
 
   try {
     // Load in the connection config information.

@@ -1,4 +1,4 @@
-import { HelloWorld } from "./types/hello"
+import { HelloWorld } from "./types/HelloWorld"
 import { Resolver, FieldResolver, Query } from "type-graphql";
 
 @Resolver(of => HelloWorld)

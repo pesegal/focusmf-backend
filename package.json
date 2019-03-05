@@ -53,6 +53,7 @@
     "@types/graphql": "^14.0.7",
     "apollo-server": "^2.4.8",
     "bcrypt": "^3.0.3",
+    "class-validator": "^0.9.1",
     "config": "^3.0.1",
     "express": "^4.16.4",
     "express-winston": "^3.0.1",

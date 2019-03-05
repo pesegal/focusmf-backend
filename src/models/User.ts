@@ -3,7 +3,6 @@ import { Permission } from "./Permission"
 import jwt from "jsonwebtoken"
 import config from "config"
 import { ObjectType, Field, ID } from "type-graphql";
-import fieldConfig from "graphql-query-complexity/dist/estimators/fieldConfig";
 
 
 /**
