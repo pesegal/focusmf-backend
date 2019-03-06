@@ -5,6 +5,8 @@ import { Permission } from "../models/Permission";
 import { Resolver, Query, FieldResolver, Root, Arg, Mutation } from "type-graphql";
 import { UserInput } from "./types/UserInput";
 import bcrypt from "bcrypt"
+import { AuthToken } from "./types/AuthToken";
+import { AuthInput } from "./types/AuthInput";
 
 @Resolver(of => User)
 export class UserResolver {
@@ -28,7 +30,15 @@ export class UserResolver {
         return this.userRepository.findOne({ email: userEmail });
     } 
 
-    @Mutation(returns => User)
+    @Query(returns => AuthToken)
+    async loginUser(@Arg("loginData") loginData: AuthInput): Promise<AuthToken> {
+        const user = await this.userRepository.findOneOrFail({ email: loginData.email })
+        const validPassword = await bcrypt.compare(loginData.password, user.password)
+        if (!validPassword) throw new Error("Invalid password.")
+        return new AuthToken(user.generateAuthToken())
+    }
+
+    @Mutation(returns => User) // TODO: Look into how to do transactions
     async createUser(@Arg("userData") newUserData: UserInput): Promise<User> {
         // Hash Password
         const salt = await bcrypt.genSalt(10);
