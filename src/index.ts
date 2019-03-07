@@ -7,6 +7,7 @@ import * as TypeGraphQL from "type-graphql"
 import { ApolloServer } from "apollo-server"
 import { HelloWorldResolver } from "./resolvers/HelloWorld"
 import { UserResolver } from "./resolvers/UserResolver";
+import { tokenAuthorization, getDataFromToken } from "./middleware/Authorization";
 
 // Register the dependency injection container with typeORM & typeGraphQL
 TypeOrm.useContainer(Container)
@@ -17,6 +18,8 @@ TypeGraphQL.useContainer(Container)
  */
 async function startup() {
   console.log("Startup") // TODO: ADD WINSTON LOGGER
+
+  const tokenHeaderName: string = config.get('authorizationHeader')
 
   try {
     // Load in the connection config information.
@@ -37,11 +40,16 @@ async function startup() {
     await TypeOrm.createConnection(dbConnectionConfig)
 
     const schema = await TypeGraphQL.buildSchema({
-      resolvers: [HelloWorldResolver, UserResolver]
+      resolvers: [HelloWorldResolver, UserResolver],
+      authChecker: tokenAuthorization
     })
 
     const server = new ApolloServer({
       schema,
+      context: async ({ req }) => { // Add auth token to context for authorization check
+        let authToken = getDataFromToken(req.headers[tokenHeaderName] as string)
+        return { authToken }
+      },
       playground: true
     })
 
