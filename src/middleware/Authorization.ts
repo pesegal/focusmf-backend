@@ -16,8 +16,9 @@ interface AuthToken {
  * Verifies a jwt and returns it's data
  * @param authToken jwt token
  */
-export function getDataFromToken(authToken: string): AuthToken {
-    return jwt.verify(authToken, config.get('jwtPrivateKey')) as AuthToken
+export function getDataFromToken(authToken: string | undefined): AuthToken | undefined {
+    if(authToken) return jwt.verify(authToken, config.get('jwtPrivateKey')) as AuthToken
+    return undefined 
 }
 
 /**

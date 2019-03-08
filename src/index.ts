@@ -1,4 +1,4 @@
-import "reflect-metadata"
+import "reflect-metadata" // Required to be imported first for typeDI to work.
 
 import config from "config"
 import { Container } from "typedi"
@@ -6,8 +6,11 @@ import * as TypeOrm from "typeorm"
 import * as TypeGraphQL from "type-graphql"
 import { ApolloServer } from "apollo-server"
 import { HelloWorldResolver } from "./resolvers/HelloWorld"
-import { UserResolver } from "./resolvers/UserResolver";
-import { tokenAuthorization, getDataFromToken } from "./middleware/Authorization";
+import { UserResolver } from "./resolvers/UserResolver"
+import { tokenAuthorization, getDataFromToken } from "./middleware/Authorization"
+import { logger } from "./middleware/Logger"
+import { GraphQLError } from "graphql";
+
 
 // Register the dependency injection container with typeORM & typeGraphQL
 TypeOrm.useContainer(Container)
@@ -17,9 +20,13 @@ TypeGraphQL.useContainer(Container)
  * This function initializes the database, server, and logger.
  */
 async function startup() {
-  console.log("Startup") // TODO: ADD WINSTON LOGGER
+  logger.info("Initializing Focus.mf Backend")
 
   const tokenHeaderName: string = config.get('authorizationHeader')
+  // Confirm the JWT private key is set correctly in production.
+  if (config.util.getEnv('NODE_ENV') === 'prod' && config.get('jwtPrivateKey') === 'devJwtKey') {
+    throw new Error("jwtPrivateKey not set. Set it with environment var 'focusmf_jwtPrivateKey'.")
+  }
 
   try {
     // Load in the connection config information.
@@ -50,14 +57,23 @@ async function startup() {
         let authToken = getDataFromToken(req.headers[tokenHeaderName] as string)
         return { authToken }
       },
-      playground: true
+      formatResponse: (response: any) => { // Logging responses
+        logger.debug(JSON.stringify(response))
+        return response
+      },
+      formatError: (error: GraphQLError) => { // Logging errors
+        logger.error(error)
+        return error
+      },
+      playground: true,
+      introspection: true
     })
 
     const { url } = await server.listen(config.get("port"))
-    console.log(`Server is running, GraphQL Playground available at ${url}`)
+    logger.info(`Server is running, GraphQL Playground available at ${url}`)
 
   } catch (error) {
-    console.log(error)
+    logger.error(error)
   }
 }
 
