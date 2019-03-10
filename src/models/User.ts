@@ -2,13 +2,16 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 import { Permission } from "./Permission"
 import jwt from "jsonwebtoken"
 import config from "config"
+import { ObjectType, Field, ID } from "type-graphql";
 
 
 /**
  * The User entity stores user accounts, and is used for authentication and authorization procedures.
  */
 @Entity()
+@ObjectType({ description: "A Focus.mf User." })
 export class User {
+    @Field(type => ID)
     @PrimaryGeneratedColumn('uuid')
     id!: string; // ! ts non-null assertion operator, explicitly tell TS that these will be defined elseware.
 
@@ -20,7 +23,8 @@ export class User {
 
     @VersionColumn()
     version!: number
-
+    
+    @Field({ description: "The users email. Standard email requirements." })
     @Column({
         length: 320,
         unique: true
@@ -30,29 +34,34 @@ export class User {
     @Column()
     password!: string
 
+    @Field()
     @Column({
         default: false
     })
     verified!: boolean
 
+    @Field({ nullable: true})
     @Column({
         nullable: true,
         length: 120
     })
     first_name!: string
 
+    @Field({ nullable: true })
     @Column({
         nullable: true,
         length: 120        
     })
     last_name!: string
 
+    @Field({ nullable: true })
     @Column({
         type: "date",
         nullable: true
     })
     dateofbirth!: string
 
+    @Field(type => [Permission])
     @OneToMany(type => Permission, permission => permission.user, { eager: true })
     permissions!: Permission[]
 
