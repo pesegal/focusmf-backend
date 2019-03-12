@@ -3,6 +3,7 @@ import { Permission } from "./Permission"
 import jwt from "jsonwebtoken"
 import config from "config"
 import { ObjectType, Field, ID } from "type-graphql";
+import { Project } from "./Project";
 
 
 /**
@@ -64,6 +65,10 @@ export class User {
     @Field(type => [Permission])
     @OneToMany(type => Permission, permission => permission.user, { eager: true })
     permissions!: Permission[]
+
+    @Field(type => [Project])
+    @OneToMany(type => Project, project => project.user, { eager: true })
+    projects!: Project[]
 
     public generateAuthToken(): string {
         const permissionStrings = this.permissions.map(p => p.permission)
