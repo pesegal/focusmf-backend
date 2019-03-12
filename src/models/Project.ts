@@ -3,10 +3,6 @@ import { User } from "./User";
 import { ObjectType, Field, ID } from "type-graphql";
 import { Color } from "./Color";
 
-/**
- * The permissions entity stores authorization permissions for a user, with
- * the idea of allowing different tiers of usage.
- */
 @Entity()
 @ObjectType({ description: "Projects allow grouping of related tasks together for analysis and aggregation." })
 export class Project {
