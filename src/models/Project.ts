@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, VersionColumn, OneToOne, JoinColumn, FileLogger } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, VersionColumn, OneToOne, JoinColumn } from "typeorm";
 import { User } from "./User";
 import { ObjectType, Field, ID } from "type-graphql";
 import { Color } from "./Color";
