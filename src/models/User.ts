@@ -3,6 +3,7 @@ import { Permission } from "./Permission"
 import jwt from "jsonwebtoken"
 import config from "config"
 import { ObjectType, Field, ID } from "type-graphql";
+import { ColumnEntity } from './Column'
 
 
 /**
@@ -23,7 +24,7 @@ export class User {
 
     @VersionColumn()
     version!: number
-    
+
     @Field({ description: "The users email. Standard email requirements." })
     @Column({
         length: 320,
@@ -50,7 +51,7 @@ export class User {
     @Field({ nullable: true })
     @Column({
         nullable: true,
-        length: 120        
+        length: 120
     })
     last_name!: string
 
@@ -70,4 +71,13 @@ export class User {
         const token = jwt.sign({id: this.id, per: permissionStrings}, config.get("jwtPrivateKey"))
         return token
     }
+
+    /**
+     *   Added `{..., nullable: false } for config in `OneToMany`
+     * because the relationship of User to Column is
+     * "one to one or more (mandatory)" according to the ERD.
+     */
+    @Field(type => [ColumnEntity])
+    @OneToMany(type => ColumnEntity, column => column.user, { eager: true, nullable: false })
+    columns!: ColumnEntity[]
 }
