@@ -3,8 +3,8 @@ import { Permission } from "./Permission"
 import jwt from "jsonwebtoken"
 import config from "config"
 import { ObjectType, Field, ID } from "type-graphql";
+import { List } from './List'
 import { Project } from "./Project";
-
 
 /**
  * The User entity stores user accounts, and is used for authentication and authorization procedures.
@@ -24,7 +24,7 @@ export class User {
 
     @VersionColumn()
     version!: number
-    
+
     @Field({ description: "The users email. Standard email requirements." })
     @Column({
         length: 320,
@@ -51,7 +51,7 @@ export class User {
     @Field({ nullable: true })
     @Column({
         nullable: true,
-        length: 120        
+        length: 120
     })
     last_name!: string
 
@@ -75,4 +75,8 @@ export class User {
         const token = jwt.sign({id: this.id, per: permissionStrings}, config.get("jwtPrivateKey"))
         return token
     }
+
+    @Field(type => [List])
+    @OneToMany(type => List, list => list.user, { eager: true, nullable: false })
+    lists!: List[]
 }
