@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, VersionColumn, ManyToOne, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, VersionColumn, ManyToOne, Column, OneToMany } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import { User } from "./User";
+import { Task } from "./Task";
 
 @Entity()
 @ObjectType({
@@ -27,4 +28,8 @@ export class List {
   @Field()
   @Column({ length: 50 })
   name!: string
+
+  @Field(type => Task)
+  @OneToMany(type => Task, task => task.list)
+  tasks!: Task[]
 }

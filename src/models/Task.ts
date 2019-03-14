@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Ver
 import { Field, ObjectType, ID } from "type-graphql";
 import { User } from "./User";
 import { TaskAction } from "./TaskAction";
+import { List } from "./List";
 
 @Entity()
 @ObjectType({ description: "Tasks represent a specific goal or item, that you can track your work against." })
@@ -27,12 +28,14 @@ export class Task {
     @OneToMany(type => TaskAction, taskAction => taskAction.task)
     taskActions!: TaskAction[]
 
-    //TODO(Clarkson): Create many to one releationship with Column
-    
+    @Field(type => List)
+    @ManyToOne(type => List, list => list.tasks)
+    list!: List
+
     @Field()
     @Column("integer")
     columnPos!: number
-    
+
     @Field()
     @Column({ length: 120 })
     name!: string
