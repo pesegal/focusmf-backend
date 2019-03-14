@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 import config from "config"
 import { ObjectType, Field, ID } from "type-graphql";
 import { ColumnEntity } from './Column'
-
+import { Project } from "./Project";
 
 /**
  * The User entity stores user accounts, and is used for authentication and authorization procedures.
@@ -65,6 +65,10 @@ export class User {
     @Field(type => [Permission])
     @OneToMany(type => Permission, permission => permission.user, { eager: true })
     permissions!: Permission[]
+
+    @Field(type => [Project])
+    @OneToMany(type => Project, project => project.user, { eager: true })
+    projects!: Project[]
 
     public generateAuthToken(): string {
         const permissionStrings = this.permissions.map(p => p.permission)
