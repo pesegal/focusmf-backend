@@ -4,9 +4,9 @@ import { User } from "./User";
 
 @Entity()
 @ObjectType({
-  description: 'A Column allows a User to apply states to Tasks.'
+  description: 'A List allows a User to apply states to Tasks.'
 })
-export class ColumnEntity {
+export class List {
   @Field(type => ID)
   @PrimaryGeneratedColumn('uuid')
   id!: string
@@ -21,7 +21,7 @@ export class ColumnEntity {
   version!: number
 
   @Field(type => User)
-  @ManyToOne(type => User, user => user.columns)
+  @ManyToOne(type => User, user => user.lists)
   user!: User
 
   @Field()

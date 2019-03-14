@@ -3,7 +3,7 @@ import { Permission } from "./Permission"
 import jwt from "jsonwebtoken"
 import config from "config"
 import { ObjectType, Field, ID } from "type-graphql";
-import { ColumnEntity } from './Column'
+import { List } from './List'
 import { Project } from "./Project";
 
 /**
@@ -76,12 +76,7 @@ export class User {
         return token
     }
 
-    /**
-     *   Added `{..., nullable: false } for config in `OneToMany`
-     * because the relationship of User to Column is
-     * "one to one or more (mandatory)" according to the ERD.
-     */
-    @Field(type => [ColumnEntity])
-    @OneToMany(type => ColumnEntity, column => column.user, { eager: true, nullable: false })
-    columns!: ColumnEntity[]
+    @Field(type => [List])
+    @OneToMany(type => List, list => list.user, { eager: true, nullable: false })
+    lists!: List[]
 }
