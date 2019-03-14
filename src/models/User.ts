@@ -5,6 +5,7 @@ import config from "config"
 import { ObjectType, Field, ID } from "type-graphql";
 import { List } from './List'
 import { Project } from "./Project";
+import { Task } from "./Task";
 
 /**
  * The User entity stores user accounts, and is used for authentication and authorization procedures.
@@ -60,7 +61,7 @@ export class User {
         type: "date",
         nullable: true
     })
-    dateofbirth!: string
+    dateofbirth!: Date
 
     @Field(type => [Permission])
     @OneToMany(type => Permission, permission => permission.user, { eager: true })
@@ -69,6 +70,10 @@ export class User {
     @Field(type => [Project])
     @OneToMany(type => Project, project => project.user, { eager: true })
     projects!: Project[]
+
+    @Field(type => [Task!])
+    @OneToMany(type => Task, task => task.user)
+    tasks!: Task[]
 
     public generateAuthToken(): string {
         const permissionStrings = this.permissions.map(p => p.permission)

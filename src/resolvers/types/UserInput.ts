@@ -23,5 +23,5 @@ export class UserInput implements Partial<User> {
 
     @Field({ nullable: true, description: "Needs to be a valid date string." })
     @IsDateString()
-    dateofbirth?: string
+    dateofbirth?: Date
 }
