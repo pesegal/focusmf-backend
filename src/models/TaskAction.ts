@@ -19,8 +19,6 @@ export class TaskAction {
     @ManyToOne(type => Task, task => task.taskActions)
     task!: Task[]
 
-    //TODO(Clarkson): Create many to one releationship with Column
-    
     @Field()
     @Column()
     actionType!: string // Make this into an enum??
