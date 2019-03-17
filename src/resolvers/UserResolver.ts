@@ -7,12 +7,14 @@ import { UserInput } from "./types/UserInput";
 import bcrypt from "bcrypt"
 import { AuthToken } from "./types/AuthToken";
 import { AuthInput } from "./types/AuthInput";
+import { List } from "../models/List";
 
 @Resolver(of => User)
 export class UserResolver {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
-        @InjectRepository(Permission) private readonly permissionRepository: Repository<Permission>
+        @InjectRepository(Permission) private readonly permissionRepository: Repository<Permission>,
+        @InjectRepository(List) private readonly listRepository: Repository<List>
      ) {}
 
     @Query(returns => [User])
@@ -46,12 +48,20 @@ export class UserResolver {
 
         // Generate User Object and set default Permission
         const user = this.userRepository.create(newUserData)
-        const response = await this.userRepository.save(user)
-        const defaultPermission = new Permission()
-        defaultPermission.user = response
+        const userSaveResponse = await this.userRepository.save(user)
+
+        userSaveResponse.lists = await this.listRepository.save([
+            this.listRepository.create({
+                name: 'default_list', user: userSaveResponse
+            })
+        ])
+
+        const defaultPermission = this.permissionRepository.create()
+        defaultPermission.user = userSaveResponse
         await this.permissionRepository.save(defaultPermission)
-        response.permissions = [defaultPermission]
-        return response
+        userSaveResponse.permissions = [ defaultPermission ]
+
+        return userSaveResponse
     }
 
     @FieldResolver()
