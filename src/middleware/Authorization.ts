@@ -7,7 +7,7 @@ interface Context {
     authToken?: AuthToken
 }
 
-interface AuthToken {
+export interface AuthToken {
     id: string
     per: string[]
 }
