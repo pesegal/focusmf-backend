@@ -18,7 +18,7 @@ interface AuthToken {
  */
 export function getDataFromToken(authToken: string | undefined): AuthToken | undefined {
     if(authToken) return jwt.verify(authToken, config.get('jwtPrivateKey')) as AuthToken
-    return undefined 
+    return undefined
 }
 
 /**
@@ -29,7 +29,7 @@ export function getDataFromToken(authToken: string | undefined): AuthToken | und
 export const tokenAuthorization: AuthChecker<Context> = ({ root, args, context, info }, roles) => {
     if (context.authToken) {
         if (roles.length === 0) {
-            return true        
+            return true
         } else {
             return _.difference(roles, context.authToken.per).length === 0
         }

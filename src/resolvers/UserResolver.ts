@@ -15,7 +15,7 @@ export class UserResolver {
         @InjectRepository(Permission) private readonly permissionRepository: Repository<Permission>
      ) {}
 
-    @Query(returns => [User]) 
+    @Query(returns => [User])
     allUsers(): Promise<User[]> {
         return this.userRepository.find();
     }
@@ -23,12 +23,12 @@ export class UserResolver {
     @Query(returns => User)
     async findUserById(@Arg("userId") userId: string): Promise<User | undefined> {
         return this.userRepository.findOne({ id: userId });
-    } 
+    }
 
     @Query(returns => User)
     async findUserByEmail(@Arg("userEmail") userEmail: string): Promise<User | undefined> {
         return this.userRepository.findOne({ email: userEmail });
-    } 
+    }
 
     @Query(returns => AuthToken)
     async loginUser(@Arg("loginData") loginData: AuthInput): Promise<AuthToken> {
@@ -43,7 +43,7 @@ export class UserResolver {
         // Hash Password
         const salt = await bcrypt.genSalt(10);
         newUserData.password = await bcrypt.hash(newUserData.password, salt)
-        
+
         // Generate User Object and set default Permission
         const user = this.userRepository.create(newUserData)
         const response = await this.userRepository.save(user)
@@ -57,5 +57,5 @@ export class UserResolver {
     @FieldResolver()
     async permissions(@Root() user: User): Promise<Permission[]> {
         return (await this.permissionRepository.find({user}))
-    } 
+    }
 }

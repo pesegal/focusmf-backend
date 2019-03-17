@@ -38,7 +38,7 @@ async function startup() {
       password: config.get('dbSettings.password'),
       database: config.get('dbSettings.database'),
       synchronize: config.get('dbSettings.synchronize'),
-      entities: [   
+      entities: [
         __dirname + "/models/*"
       ],
       logging: 'all'
