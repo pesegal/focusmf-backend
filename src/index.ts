@@ -10,6 +10,7 @@ import { UserResolver } from "./resolvers/UserResolver"
 import { tokenAuthorization, getDataFromToken } from "./middleware/Authorization"
 import { logger } from "./middleware/Logger"
 import { GraphQLError } from "graphql";
+import { ListResolver } from "./resolvers/ListResolver";
 
 
 // Register the dependency injection container with typeORM & typeGraphQL
@@ -38,7 +39,7 @@ async function startup() {
       password: config.get('dbSettings.password'),
       database: config.get('dbSettings.database'),
       synchronize: config.get('dbSettings.synchronize'),
-      entities: [   
+      entities: [
         __dirname + "/models/*"
       ],
       logging: 'all'
@@ -47,7 +48,7 @@ async function startup() {
     await TypeOrm.createConnection(dbConnectionConfig)
 
     const schema = await TypeGraphQL.buildSchema({
-      resolvers: [HelloWorldResolver, UserResolver],
+      resolvers: [HelloWorldResolver, UserResolver, ListResolver],
       authChecker: tokenAuthorization
     })
 
