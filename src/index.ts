@@ -12,6 +12,7 @@ import { logger } from "./middleware/Logger"
 import { GraphQLError } from "graphql";
 import { ListResolver } from "./resolvers/ListResolver";
 import { DefaultData } from "./helpers/DefaultData";
+import { ProjectResolver } from "./resolvers/ProjectResolver";
 
 
 // Register the dependency injection container with typeORM & typeGraphQL
@@ -52,7 +53,7 @@ async function startup() {
     await defaultData.initDefaultColorData()
 
     const schema = await TypeGraphQL.buildSchema({
-      resolvers: [HelloWorldResolver, UserResolver, ListResolver],
+      resolvers: [HelloWorldResolver, UserResolver, ListResolver, ProjectResolver],
       authChecker: tokenAuthorization
     })
 
