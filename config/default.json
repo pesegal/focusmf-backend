@@ -11,5 +11,7 @@
     "logRequests": true,
     "logLevel": "debug",
     "jwtPrivateKey": "devJwtKey",
-    "authorizationHeader": "authorization"
+    "authorizationHeader": "authorization",
+    "defaultProjectColorName": "projectDefault",
+    "defaultProjectColorValue": "4183D7"
 }
