@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Arg, Authorized, Ctx } from "type-graphql"
+import { Resolver, Mutation, Arg, Authorized, Ctx, Query } from "type-graphql"
 import { List } from "../models/List"
 import { User } from "../models/User"
 import { InjectRepository } from "typeorm-typedi-extensions"
@@ -17,6 +17,13 @@ export class ProjectResolver {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(Color) private readonly colorRepository: Repository<Color>
   ) {}
+
+  @Authorized()
+  @Query(returns => [Project])
+  async getProjects(@Ctx("authToken") authToken: AuthToken): Promise<Project[]> {
+    const user = await this.userRepository.findOne({ id: authToken.id })
+    return user!.projects
+  }
 
   @Authorized()
   @Mutation(returns => Project)
