@@ -6,6 +6,9 @@ import config from "config"
 import { Service } from "typedi";
 
 
+export const defaultColorName = config.get("defaultProjectColorName") as string
+export const defaultColorHex = config.get("defaultProjectColorValue") as string
+
 /**
  * DefaultData class is used to check and populate default data if it doesn't
  * exist. Upon startup of the application server.
@@ -15,15 +18,12 @@ export class DefaultData {
 
     constructor(
         @InjectRepository(Color) private readonly colorRepository: Repository<Color>
-    ) {
-    }
+    ) {}
 
     async initDefaultColorData(): Promise<void> {
         // Check to make sure that default project color exists.
-        const defaultColorName = config.get("defaultProjectColorName") as string
         const defaultColor = await this.colorRepository.findOne({ name: defaultColorName })
         if (!defaultColor) {
-            const defaultColorHex = config.get("defaultProjectColorValue") as string
             logger.info(`Default color not found. Initializing as: ${defaultColorHex}`)
             let color = this.colorRepository.create({
                 name: defaultColorName,

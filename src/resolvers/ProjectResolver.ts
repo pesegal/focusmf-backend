@@ -7,6 +7,7 @@ import { Task } from "../models/Task"
 import { AuthToken } from "../middleware/Authorization"
 import { Project } from "../models/Project"
 import { Color } from "../models/Color"
+import { defaultColorName } from "../helpers/DefaultData"
 import config from "config"
 
 @Resolver(of => Project)
@@ -24,7 +25,7 @@ export class ProjectResolver {
     let color = await this.colorRepository.findOne({ name: colorName })
     // TODO(peter): The default behavior when an invalid color id is passed is to default, re-examine this behavior later.
     if (!color) {
-      color = await this.colorRepository.findOne({ name: config.get("defaultProjectColorName") as string })
+      color = await this.colorRepository.findOne({ name: defaultColorName })
     }
     const project = this.projectRepository.create({ name, user: user, color: color })
     const projectSaveResponse = await this.projectRepository.save(project)
