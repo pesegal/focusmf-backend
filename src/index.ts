@@ -11,6 +11,7 @@ import { tokenAuthorization, getDataFromToken } from "./middleware/Authorization
 import { logger } from "./middleware/Logger"
 import { GraphQLError } from "graphql";
 import { ListResolver } from "./resolvers/ListResolver";
+import { User } from "./models/User";
 
 
 // Register the dependency injection container with typeORM & typeGraphQL
@@ -56,7 +57,11 @@ async function startup() {
       schema,
       context: async ({ req }) => { // Add auth token to context for authorization check
         let authToken = getDataFromToken(req.headers[tokenHeaderName] as string)
-        return { authToken }
+        let user
+        if (authToken) {
+          user = await TypeOrm.getRepository(User).findOne({ id: authToken.id }) as User
+        }
+        return { authToken, user }
       },
       formatResponse: (response: any) => { // Logging responses
         logger.debug(JSON.stringify(response))
