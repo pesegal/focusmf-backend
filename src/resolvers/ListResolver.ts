@@ -22,5 +22,4 @@ export class ListResolver {
     const listSaveResponse = await this.listRepository.save(list)
     return listSaveResponse
   }
-
 }
