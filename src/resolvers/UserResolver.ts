@@ -2,12 +2,13 @@ import { InjectRepository } from "typeorm-typedi-extensions"
 import { User } from "../models/User";
 import { Repository } from "typeorm";
 import { Permission } from "../models/Permission";
-import { Resolver, Query, FieldResolver, Root, Arg, Mutation } from "type-graphql";
+import { Resolver, Query, FieldResolver, Root, Arg, Mutation, Authorized, Ctx } from "type-graphql";
 import { UserInput } from "./types/UserInput";
 import bcrypt from "bcrypt"
 import { AuthToken } from "./types/AuthToken";
 import { AuthInput } from "./types/AuthInput";
 import { List } from "../models/List";
+import { AuthToken as AuthTokenMiddleware } from "../middleware/Authorization"
 
 @Resolver(of => User)
 export class UserResolver {
@@ -67,5 +68,12 @@ export class UserResolver {
     @FieldResolver()
     async permissions(@Root() user: User): Promise<Permission[]> {
         return (await this.permissionRepository.find({user}))
+    }
+
+    @Authorized()
+    @Query(returns => [List])
+    async listsForUser(@Ctx("authToken") authToken: AuthTokenMiddleware): Promise<List[]> {
+        const user = await this.userRepository.findOne({ id: authToken.id })
+        return (user instanceof User) ? user.lists : []
     }
 }
