@@ -72,8 +72,7 @@ export class UserResolver {
 
     @Authorized()
     @Query(returns => [List])
-    async listsForUser(@Ctx("authToken") authToken: AuthTokenMiddleware): Promise<List[]> {
-        const user = await this.userRepository.findOne({ id: authToken.id })
+    async listsForUser(@Ctx("user") user: User): Promise<List[]> {
         return (user instanceof User) ? user.lists : []
     }
 }
