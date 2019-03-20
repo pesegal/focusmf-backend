@@ -22,4 +22,25 @@ export class ListResolver {
     const listSaveResponse = await this.listRepository.save(list)
     return listSaveResponse
   }
+
+  @Mutation(returns => List)
+  async updateList(
+    @Arg('id') id: string,
+    @Arg('name') name: string,
+    @Ctx('authToken') authToken: AuthToken,
+    @Ctx('user') user: User
+  ): Promise<List|null> {
+    if (!(user instanceof User)) {
+      throw new Error(`Unable to find user`)
+    }
+
+    const list = user.lists.find(list => list.id === id)
+    if (!(list instanceof List)) {
+      throw new Error(`Unable to find list with id=${id}`)
+    }
+
+    list.name = name
+    await this.listRepository.update(id, { name })
+    return list
+  }
 }
