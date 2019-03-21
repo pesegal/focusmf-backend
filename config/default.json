@@ -5,7 +5,8 @@
         "username": "focus",
         "password": "focus",
         "database": "focusmf",
-        "synchronize": true
+        "synchronize": true,
+        "logLevel": "none"
     },
     "port": "3000",
     "logRequests": true,
