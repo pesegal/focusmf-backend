@@ -44,7 +44,7 @@ async function startup() {
       entities: [
         __dirname + "/models/*"
       ],
-      logging: 'all'
+      logging: config.get("dbSettings.logLevel")
     }
 
     await TypeOrm.createConnection(dbConnectionConfig)
