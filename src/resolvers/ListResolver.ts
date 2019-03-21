@@ -49,4 +49,15 @@ export class ListResolver {
     await this.listRepository.update(id, { name })
     return list
   }
+
+  @Mutation(returns => [List])
+  async deleteList(@Ctx('user') user: User, @Arg('id') id: string): Promise<List[]> {
+    if (!(user instanceof User)) {
+      throw new AuthenticationError('Unable to find user')
+    }
+
+    await this.listRepository.findOneOrFail(id)
+    await this.listRepository.delete(id)
+    return (await this.userRepository.findOneOrFail(user.id)).lists
+  }
 }
