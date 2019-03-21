@@ -34,7 +34,6 @@ export class ListResolver {
   async updateList(
     @Arg('id') id: string,
     @Arg('name') name: string,
-    @Ctx('authToken') authToken: AuthToken,
     @Ctx('user') user: User
   ): Promise<List|null> {
     if (!(user instanceof User)) {
