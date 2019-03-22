@@ -63,7 +63,7 @@ async function startup() {
         let authToken = getDataFromToken(req.headers[tokenHeaderName] as string)
         let user
         if (authToken) {
-          user = await TypeOrm.getRepository(User).findOne({ id: authToken.id }) as User
+          user = await TypeOrm.getRepository(User).findOne({ id: authToken.id })
         }
         return { authToken, user }
       },
