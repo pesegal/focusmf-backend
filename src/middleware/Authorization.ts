@@ -23,7 +23,7 @@ export function getDataFromToken(authToken: string | undefined): AuthToken | und
 }
 
 /**
- * This function returns true/false on if the user has the necessary authorization roles.
+ * This function returns true/false if the user has the necessary authorization roles.
  * @param graphqlVars default graphql variables
  * @param roles a list of Authorization roles required to resolve
  */
