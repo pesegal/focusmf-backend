@@ -2,14 +2,12 @@ import { InjectRepository } from "typeorm-typedi-extensions"
 import { User } from "../models/User";
 import { Repository } from "typeorm";
 import { Permission } from "../models/Permission";
-import { Resolver, Query, FieldResolver, Root, Arg, Mutation, Authorized, Ctx } from "type-graphql";
+import { Resolver, Query, FieldResolver, Root, Arg, Mutation } from "type-graphql";
 import { UserInput } from "./types/UserInput";
 import bcrypt from "bcrypt"
 import { AuthToken } from "./types/AuthToken";
 import { AuthInput } from "./types/AuthInput";
 import { List } from "../models/List";
-import { AuthToken as AuthTokenMiddleware } from "../middleware/Authorization"
-import { AuthenticationError } from "apollo-server";
 
 @Resolver(of => User)
 export class UserResolver {

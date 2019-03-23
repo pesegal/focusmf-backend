@@ -1,10 +1,9 @@
-import { Resolver, Mutation, Arg, Authorized, Ctx } from "type-graphql"
+import { Resolver, Mutation, Arg, Authorized, Ctx, Query } from "type-graphql"
 import { List } from "../models/List"
 import { User } from "../models/User"
 import { InjectRepository } from "typeorm-typedi-extensions"
 import { Repository } from "typeorm"
 import { Task } from "../models/Task"
-import { AuthenticationError } from "apollo-server";
 
 @Resolver(of => List)
 export class ListResolver {
