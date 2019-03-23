@@ -17,8 +17,9 @@ export interface AuthToken {
  * @param authToken jwt token
  */
 export function getDataFromToken(authToken: string | undefined): AuthToken | undefined {
-    if(authToken) return jwt.verify(authToken, config.get('jwtPrivateKey')) as AuthToken
-    return undefined
+    if(authToken) {
+        return jwt.verify(authToken, config.get('jwtPrivateKey')) as AuthToken
+    }
 }
 
 /**
