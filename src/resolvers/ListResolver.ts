@@ -4,7 +4,6 @@ import { User } from "../models/User"
 import { InjectRepository } from "typeorm-typedi-extensions"
 import { Repository } from "typeorm"
 import { Task } from "../models/Task"
-import { AuthToken } from "../middleware/Authorization"
 
 @Resolver(of => List)
 export class ListResolver {
@@ -16,8 +15,7 @@ export class ListResolver {
 
   @Authorized()
   @Mutation(returns => List)
-  async createList(@Arg("name") name: string, @Ctx("authToken") authToken: AuthToken): Promise<List> {
-    const user = await this.userRepository.findOne({ id: authToken.id })
+  async createList(@Arg("name") name: string, @Ctx("user") user: User): Promise<List> {
     const list = this.listRepository.create({ name, user: user })
     const listSaveResponse = await this.listRepository.save(list)
     return listSaveResponse
@@ -27,7 +25,6 @@ export class ListResolver {
   async updateList(
     @Arg('id') id: string,
     @Arg('name') name: string,
-    @Ctx('authToken') authToken: AuthToken,
     @Ctx('user') user: User
   ): Promise<List|null> {
     if (!(user instanceof User)) {
