@@ -27,7 +27,7 @@ export function getDataFromToken(authToken: string | undefined): AuthToken | und
  * @param graphqlVars default graphql variables
  * @param roles a list of Authorization roles required to resolve
  */
-export const tokenAuthorization: AuthChecker<Context> = ({ root, args, context, info }, roles) => {
+export const tokenAuthorization: AuthChecker<Context> = ({ context }, roles) => {
     if (context.authToken) {
         if (roles.length === 0) {
             return true
