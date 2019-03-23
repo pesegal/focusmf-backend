@@ -70,12 +70,4 @@ export class UserResolver {
     async permissions(@Root() user: User): Promise<Permission[]> {
         return (await this.permissionRepository.find({user}))
     }
-
-    @Query(returns => [List])
-    async listsForUser(@Ctx("user") user: User): Promise<List[]> {
-        if (!(user instanceof User)) {
-            throw new AuthenticationError('Unable to find user')
-        }
-        return user.lists || []
-    }
 }

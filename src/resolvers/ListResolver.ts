@@ -58,4 +58,10 @@ export class ListResolver {
     await this.listRepository.delete(id)
     return (await this.userRepository.findOneOrFail(user.id)).lists
   }
+
+  @Authorized()
+  @Query(returns => [List])
+  async findListsByUser(@Ctx("user") user: User): Promise<List[]> {
+      return user.lists
+  }
 }
