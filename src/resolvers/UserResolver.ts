@@ -9,6 +9,7 @@ import { AuthToken } from "./types/AuthToken";
 import { AuthInput } from "./types/AuthInput";
 import { List } from "../models/List";
 import { AuthToken as AuthTokenMiddleware } from "../middleware/Authorization"
+import { AuthenticationError } from "apollo-server";
 
 @Resolver(of => User)
 export class UserResolver {
@@ -70,9 +71,11 @@ export class UserResolver {
         return (await this.permissionRepository.find({user}))
     }
 
-    @Authorized()
     @Query(returns => [List])
     async listsForUser(@Ctx("user") user: User): Promise<List[]> {
-        return (user instanceof User) ? user.lists : []
+        if (!(user instanceof User)) {
+            throw new AuthenticationError('Unable to find user')
+        }
+        return user.lists || []
     }
 }
