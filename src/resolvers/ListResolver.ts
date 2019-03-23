@@ -4,7 +4,6 @@ import { User } from "../models/User"
 import { InjectRepository } from "typeorm-typedi-extensions"
 import { Repository } from "typeorm"
 import { Task } from "../models/Task"
-import { AuthToken } from "../middleware/Authorization"
 import { AuthenticationError } from "apollo-server";
 
 @Resolver(of => List)
@@ -15,7 +14,6 @@ export class ListResolver {
     @InjectRepository(Task) private readonly taskRepository: Repository<Task>
   ) {}
 
-  @Authorized()
   @Mutation(returns => List)
   async createList(
     @Arg("name") name: string,

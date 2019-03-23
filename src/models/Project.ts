@@ -11,7 +11,7 @@ export class Project {
     id!: string
 
     @Field(type => User)
-    @ManyToOne(type => User, user => user.projects)
+    @ManyToOne(type => User, user => user.projects, { nullable: false })
     user!: User
 
     @CreateDateColumn()
@@ -22,13 +22,12 @@ export class Project {
 
     @VersionColumn()
     version!: number
-    
+
     @Field()
     @Column({ length: 240 })
     name!: string
 
     @Field()
-    @OneToOne(type => Color)
-    @JoinColumn()
+    @ManyToOne(type => Color, { nullable: false })
     color!: Color
 }
