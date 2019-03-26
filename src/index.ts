@@ -60,12 +60,15 @@ async function startup() {
     const server = new ApolloServer({
       schema,
       context: async ({ req }) => { // Add auth token to context for authorization check
-        let authToken = getDataFromToken(req.headers[tokenHeaderName] as string)
-        let user
-        if (authToken) {
-          user = await TypeOrm.getRepository(User).findOne({ id: authToken.id })
+        let authToken, user
+        try {
+          authToken = getDataFromToken(req.headers[tokenHeaderName] as string)
+          user = await TypeOrm.getRepository(User).findOneOrFail({ id: authToken!.id })
+          return { authToken, user }
+        } catch (e) {
+          logger.error(`Unable to create an authenticated Context with auth token as ${authToken}`)
+          return {}
         }
-        return { authToken, user }
       },
       formatResponse: (response: any) => { // Logging responses
         logger.debug(JSON.stringify(response))

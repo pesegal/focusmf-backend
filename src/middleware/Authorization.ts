@@ -17,16 +17,17 @@ export interface AuthToken {
  * @param authToken jwt token
  */
 export function getDataFromToken(authToken: string | undefined): AuthToken | undefined {
-    if(authToken) return jwt.verify(authToken, config.get('jwtPrivateKey')) as AuthToken
-    return undefined
+    if(authToken) {
+        return jwt.verify(authToken, config.get('jwtPrivateKey')) as AuthToken
+    }
 }
 
 /**
- * This function returns true/false on if the user has the necessary authorization roles.
+ * This function returns true/false if the user has the necessary authorization roles.
  * @param graphqlVars default graphql variables
  * @param roles a list of Authorization roles required to resolve
  */
-export const tokenAuthorization: AuthChecker<Context> = ({ root, args, context, info }, roles) => {
+export const tokenAuthorization: AuthChecker<Context> = ({ context }, roles) => {
     if (context.authToken) {
         if (roles.length === 0) {
             return true
