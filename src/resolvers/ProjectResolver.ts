@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Arg, Authorized, Ctx, Query, FieldResolver, Root } from "type-graphql"
 import { User } from "../models/User"
 import { InjectRepository } from "typeorm-typedi-extensions"
-import { Repository } from "typeorm"
+import { Repository, Not } from "typeorm"
 import { Project } from "../models/Project"
 import { Color } from "../models/Color"
 import { defaultColorName } from "../helpers/DefaultData"
@@ -11,7 +11,6 @@ import { ProjectInput } from "./types/ProjectInput";
 export class ProjectResolver {
   constructor(
     @InjectRepository(Project) private readonly projectRepository: Repository<Project>,
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(Color) private readonly colorRepository: Repository<Color>
   ) {}
 
@@ -19,8 +18,7 @@ export class ProjectResolver {
   @Authorized()
   @Query(returns => [Project])
   async getProjects(@Ctx("user") user: User): Promise<Project[]> {
-    const userWithProjects = await this.userRepository.findOneOrFail(user.id, { relations: ['projects'] })
-    return userWithProjects.projects
+    return this.projectRepository.find({ relations: ['user'], where: { deleted_timestamp: null, user: user }})
   }
 
   // Mutations
@@ -49,6 +47,14 @@ export class ProjectResolver {
     if (projectInput.name) {
       project.name = projectInput.name
     }
+    return this.projectRepository.save(project)
+  }
+
+  @Authorized()
+  @Mutation(returns => Project)
+  async deleteProject(@Arg('projectInput') projectInput: ProjectInput, @Ctx('user') user: User): Promise<Project> {
+    const project = await this.projectRepository.findOneOrFail(projectInput.id)
+    project.deleted_timestamp = new Date() // TODO: Investigate how does JS and PG default timezones??
     return this.projectRepository.save(project)
   }
 
