@@ -5,6 +5,7 @@ import { Repository } from "typeorm"
 import { Project } from "../models/Project"
 import { Color } from "../models/Color"
 import { defaultColorName } from "../helpers/DefaultData"
+import { ProjectInput } from "./types/ProjectInput";
 
 @Resolver(of => Project)
 export class ProjectResolver {
@@ -36,10 +37,31 @@ export class ProjectResolver {
     return projectSaveResponse
   }
 
+  @Authorized()
+  @Mutation(returns => Project)
+  async updateProject(@Arg('projectInput') projectInput: ProjectInput, @Ctx('user') user: User): Promise<Project> {
+    const project = await this.projectRepository.findOneOrFail(projectInput.id, { relations: ['color'] })
+    if (projectInput.colorId) {
+      project.color = await this.colorRepository.findOneOrFail({ id: projectInput.colorId })
+    } else if (projectInput.colorName) {
+      project.color = await this.colorRepository.findOneOrFail({ name: projectInput.colorName })
+    }
+    if (projectInput.name) {
+      project.name = projectInput.name
+    }
+    return this.projectRepository.save(project)
+  }
+
   // Field Resolvers
   @FieldResolver()
   async user(@Root() project: Project): Promise<User> {
     const projectEntity = await this.projectRepository.findOneOrFail(project.id, { relations: ['user'] })
     return projectEntity.user
+  }
+
+  @FieldResolver()
+  async color(@Root() project: Project): Promise<Color> {
+    const projectEntity = await this.projectRepository.findOneOrFail(project.id, { relations: ['color'] })
+    return projectEntity.color
   }
 }
