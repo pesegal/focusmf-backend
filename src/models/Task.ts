@@ -12,10 +12,13 @@ export class Task {
     id!: string
 
     @CreateDateColumn()
-    created_date!: string
+    created_date!: Date
 
     @UpdateDateColumn()
-    updated_date!: string
+    updated_date!: Date
+
+    @Column({ type: 'timestamp', nullable: true })
+    deleted_date!: Date
 
     @VersionColumn()
     version!: number
