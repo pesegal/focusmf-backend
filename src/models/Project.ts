@@ -35,7 +35,7 @@ export class Project {
     @ManyToOne(type => Color, { nullable: false })
     color!: Color
 
-    @Field()
+    @Field(type => [Task])
     @ManyToMany(type => Task, task => task.projects)
     @JoinTable()
     tasks!: Task[]
