@@ -17,7 +17,7 @@ export class UserResolver {
         @InjectRepository(List) private readonly listRepository: Repository<List>
      ) {}
 
-    @Query(returns => [User])
+    @Query(returns => [User]) //TODO: Make this require administrator authorization
     allUsers(): Promise<User[]> {
         return this.userRepository.find();
     }
