@@ -31,6 +31,8 @@ export class Task {
     @OneToMany(type => TaskAction, taskAction => taskAction.task)
     taskActions!: TaskAction[]
 
+    // TODO: implement many to many relationship between tasks and projects
+
     @Field(type => List)
     @ManyToOne(type => List, list => list.tasks)
     list!: List
