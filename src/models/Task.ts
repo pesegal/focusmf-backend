@@ -27,7 +27,7 @@ export class Task {
     @ManyToOne(type => User, user => user.tasks)
     user!: User
 
-    @Field(type => TaskAction)
+    @Field(type => [TaskAction])
     @OneToMany(type => TaskAction, taskAction => taskAction.task)
     taskActions!: TaskAction[]
 
