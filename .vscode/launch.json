@@ -8,6 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
+            "preLaunchTask": "npm: compile",
             "program": "${workspaceFolder}/dist/index.js"
         }
     ]

@@ -14,6 +14,7 @@ import { ListResolver } from "./resolvers/ListResolver";
 import { User } from "./models/User";
 import { DefaultData } from "./helpers/DefaultData";
 import { ProjectResolver } from "./resolvers/ProjectResolver";
+import { TaskResolver } from "./resolvers/TaskResolver"
 
 // Register the dependency injection container with typeORM & typeGraphQL
 TypeOrm.useContainer(Container)
@@ -53,7 +54,7 @@ async function startup() {
     await defaultData.initDefaultColorData()
 
     const schema = await TypeGraphQL.buildSchema({
-      resolvers: [HelloWorldResolver, UserResolver, ListResolver, ProjectResolver],
+      resolvers: [HelloWorldResolver, UserResolver, ListResolver, ProjectResolver, TaskResolver],
       authChecker: tokenAuthorization
     })
 

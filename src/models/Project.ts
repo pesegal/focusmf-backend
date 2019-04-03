@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, VersionColumn, OneToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, VersionColumn, OneToOne, JoinColumn, ManyToMany, JoinTable } from "typeorm";
 import { User } from "./User";
 import { ObjectType, Field, ID } from "type-graphql";
 import { Color } from "./Color";
+import { Task } from "./Task";
 
 @Entity()
 @ObjectType({ description: "Projects allow grouping of related tasks together for analysis and aggregation." })
@@ -33,4 +34,9 @@ export class Project {
     @Field()
     @ManyToOne(type => Color, { nullable: false })
     color!: Color
+
+    @Field(type => [Task])
+    @ManyToMany(type => Task, task => task.projects)
+    @JoinTable()
+    tasks!: Task[]
 }

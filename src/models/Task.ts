@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, VersionColumn, Column, ManyToOne, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, VersionColumn, Column, ManyToOne, OneToMany, ManyToMany } from "typeorm";
 import { Field, ObjectType, ID } from "type-graphql";
 import { User } from "./User";
 import { TaskAction } from "./TaskAction";
 import { List } from "./List";
+import { Project } from "./Project";
 
 @Entity()
 @ObjectType({ description: "Tasks represent a specific goal or item, that you can track your work against." })
@@ -12,10 +13,13 @@ export class Task {
     id!: string
 
     @CreateDateColumn()
-    created_date!: string
+    created_date!: Date
 
     @UpdateDateColumn()
-    updated_date!: string
+    updated_date!: Date
+
+    @Column({ type: 'timestamp', nullable: true })
+    deleted_date!: Date
 
     @VersionColumn()
     version!: number
@@ -24,9 +28,13 @@ export class Task {
     @ManyToOne(type => User, user => user.tasks)
     user!: User
 
-    @Field(type => TaskAction)
+    @Field(type => [TaskAction])
     @OneToMany(type => TaskAction, taskAction => taskAction.task)
     taskActions!: TaskAction[]
+
+    @Field(type => [Project])
+    @ManyToMany(type => Project, project => project.tasks)
+    projects!: Project[]
 
     @Field(type => List)
     @ManyToOne(type => List, list => list.tasks)
