@@ -41,7 +41,7 @@ export class TaskResolver {
                 task.projects = projects
             }
         }
-        return await this.taskRepository.save(task)
+        return this.taskRepository.save(task)
     }
 
     @FieldResolver()
