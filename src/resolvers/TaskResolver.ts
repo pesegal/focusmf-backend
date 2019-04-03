@@ -1,4 +1,4 @@
-import { Resolver, Authorized, Mutation, Ctx, Arg } from "type-graphql";
+import { Resolver, Authorized, Mutation, Ctx, Arg, FieldResolver, Query } from "type-graphql";
 import { Task } from "../models/Task";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { Repository } from "typeorm";
@@ -15,6 +15,12 @@ export class TaskResolver {
         @InjectRepository(Project) private readonly projectRepository: Repository<Project>,
         @InjectRepository(List) private readonly listRepository: Repository<List>
     ) {}
+
+    @Authorized()
+    @Query(returns => [Task])
+    async getTasks(@Ctx('user') user: User): Promise<Task[]> {
+        return this.taskRepository.find({ relations: ['user'], where: { deleted_timestamp: null, user: user }})
+    }
 
     @Authorized()
     @Mutation(returns => Task)

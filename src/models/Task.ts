@@ -19,7 +19,7 @@ export class Task {
     updated_date!: Date
 
     @Column({ type: 'timestamp', nullable: true })
-    deleted_date!: Date
+    deleted_timestamp!: Date
 
     @VersionColumn()
     version!: number
