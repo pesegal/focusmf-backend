@@ -1,4 +1,4 @@
-import { Resolver, Authorized, Mutation, Ctx, Arg, FieldResolver, Query } from "type-graphql";
+import { Resolver, Authorized, Mutation, Ctx, Arg, FieldResolver, Query, Root } from "type-graphql";
 import { Task } from "../models/Task";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { Repository } from "typeorm";
@@ -6,7 +6,6 @@ import { CreateTaskInput } from "./types/TaskInput";
 import { User } from "../models/User";
 import { Project } from "../models/Project";
 import { List } from "../models/List";
-
 
 @Resolver(of => Task)
 export class TaskResolver {
@@ -30,7 +29,8 @@ export class TaskResolver {
             name: input.name,
             notes: input.notes,
             list: list,
-            columnPos: input.columnPos || 0
+            columnPos: input.columnPos,
+            user: user
         })
 
         if (input.projectIds) {
@@ -42,6 +42,24 @@ export class TaskResolver {
             }
         }
         return await this.taskRepository.save(task)
+    }
+
+    @FieldResolver()
+    async user(@Root() task: Task): Promise<User> {
+        const taskEntity = await this.taskRepository.findOneOrFail(task.id, { relations: ['user'] })
+        return taskEntity.user
+    }
+
+    @FieldResolver()
+    async projects(@Root() task: Task): Promise<Project[]> {
+        const taskEntity = await this.taskRepository.findOneOrFail(task.id, { relations: ['projects'] })
+        return taskEntity.projects
+    }
+
+    @FieldResolver()
+    async list(@Root() task: Task): Promise<List> {
+        const taskEntity = await this.taskRepository.findOneOrFail(task.id, { relations: ['list'] })
+        return taskEntity.list
     }
 
 }
