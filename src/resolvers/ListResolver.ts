@@ -45,7 +45,7 @@ export class ListResolver {
   @Authorized()
   @Mutation(returns => List)
   async deleteList(@Ctx('user') user: User, @Arg('id') id: string): Promise<List> {
-    const list = await this.listRepository.findOneOrFail(id)
+    const list = await this.listRepository.findOneOrFail(id, { where: { deleted_timestamp: null }})
     list.deleted_timestamp = new Date()
     return this.listRepository.save(list)
   }
