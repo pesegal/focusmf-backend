@@ -4,6 +4,7 @@ import { User } from "../models/User"
 import { InjectRepository } from "typeorm-typedi-extensions"
 import { Repository } from "typeorm"
 import { Task } from "../models/Task"
+import { listenerCount } from "cluster";
 
 @Resolver(of => List)
 export class ListResolver {
@@ -42,16 +43,16 @@ export class ListResolver {
   }
 
   @Authorized()
-  @Mutation(returns => [List])
-  async deleteList(@Ctx('user') user: User, @Arg('id') id: string): Promise<List[]> {
-    await this.listRepository.findOneOrFail(id)
-    await this.listRepository.delete(id)
-    return (await this.userRepository.findOneOrFail(user.id)).lists
+  @Mutation(returns => List)
+  async deleteList(@Ctx('user') user: User, @Arg('id') id: string): Promise<List> {
+    const list = await this.listRepository.findOneOrFail(id)
+    list.deleted_timestamp = new Date()
+    return this.listRepository.save(list)
   }
 
   @Authorized()
   @Query(returns => [List])
   async findListsByUser(@Ctx("user") user: User): Promise<List[]> {
-      return user.lists
+    return this.listRepository.find({ where: { deleted_timestamp: null, user }})
   }
 }
