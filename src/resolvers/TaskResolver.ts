@@ -2,7 +2,7 @@ import { Resolver, Authorized, Mutation, Ctx, Arg, FieldResolver, Query, Root } 
 import { Task } from "../models/Task";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { Repository } from "typeorm";
-import { CreateTaskInput } from "./types/TaskInput";
+import { CreateTaskInput, UpdateTaskInput } from "./types/TaskInput";
 import { User } from "../models/User";
 import { Project } from "../models/Project";
 import { List } from "../models/List";
@@ -23,7 +23,7 @@ export class TaskResolver {
 
     @Authorized()
     @Mutation(returns => Task)
-    async createTask(@Arg('createTaskInput') input: CreateTaskInput, @Ctx('user') user: User): Promise<Task> {
+    async createTask(@Arg('createInput') input: CreateTaskInput, @Ctx('user') user: User): Promise<Task> {
         const list = await this.listRepository.findOneOrFail({ id: input.listId })
         const task = this.taskRepository.create({
             name: input.name,
@@ -33,14 +33,26 @@ export class TaskResolver {
             user: user
         })
 
-        if (input.projectIds) {
-            const projects = await this.projectRepository.findByIds(input.projectIds)
-            if (!projects) {
-                throw Error(`No projects found with passed in ids: ${input.projectIds}`)
-            } else {
-                task.projects = projects
-            }
+        await this.findAndSetTaskProjects(input, task);
+        return this.taskRepository.save(task)
+    }
+
+    @Authorized()
+    @Mutation(returns => Task)
+    async updateTask(@Arg('updateInput') input: UpdateTaskInput, @Ctx('user') user: User): Promise<Task> {
+        const task = await this.taskRepository.findOneOrFail({ id: input.id })
+        if (input.name) {
+            task.name = input.name
         }
+        if (input.notes) {
+            task.notes = input.notes
+        }
+        if (input.listId) {
+            const list = await this.listRepository.findOneOrFail({ id: input.listId })
+            task.list = list
+            task.columnPos = input.columnPos // pass in the new position or default to 0 (first)
+        }
+        await this.findAndSetTaskProjects(input, task)
         return this.taskRepository.save(task)
     }
 
@@ -62,4 +74,20 @@ export class TaskResolver {
         return taskEntity.list
     }
 
+    /**
+     * Helper method that finds and updates the task's project list.
+     * @param input Input that contains the project id's
+     * @param task task entity to update
+     */
+    private async findAndSetTaskProjects(input: CreateTaskInput | UpdateTaskInput, task: Task) {
+        if (input.projectIds) {
+            const projects = await this.projectRepository.findByIds(input.projectIds)
+            if (!projects) {
+                throw Error(`No projects found with passed in ids: ${input.projectIds}`)
+            }
+            else {
+                task.projects = projects
+            }
+        }
+    }
 }
