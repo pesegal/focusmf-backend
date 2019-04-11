@@ -18,6 +18,9 @@ export class List {
   @UpdateDateColumn()
   updated_date!: string
 
+  @Column({ type: 'timestamp', nullable: true })
+  deleted_timestamp!: Date
+
   @VersionColumn()
   version!: number
 
