@@ -56,6 +56,14 @@ export class TaskResolver {
         return this.taskRepository.save(task)
     }
 
+    @Authorized()
+    @Mutation(returns => Task)
+    async deleteTask(@Arg("taskId") taskId: string, @Ctx('user') user: User): Promise<Task> {
+        const task = await this.taskRepository.findOneOrFail(taskId)
+        task.deleted_timestamp = new Date()
+        return this.taskRepository.save(task)
+    }
+
     @FieldResolver()
     async user(@Root() task: Task): Promise<User> {
         const taskEntity = await this.taskRepository.findOneOrFail(task.id, { relations: ['user'] })
