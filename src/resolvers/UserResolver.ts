@@ -40,8 +40,8 @@ export class UserResolver {
         return new AuthToken(user.generateAuthToken())
     }
 
-    @Mutation(returns => User) // TODO: Look into how to do transactions
-    async createUser(@Arg("userData") newUserData: UserInput): Promise<User> {
+    @Mutation(returns => AuthToken) // TODO: Look into how to do transactions
+    async createUser(@Arg("userData") newUserData: UserInput): Promise<AuthToken> {
         // Hash Password
         const salt = await bcrypt.genSalt(10);
         newUserData.password = await bcrypt.hash(newUserData.password, salt)
@@ -61,7 +61,7 @@ export class UserResolver {
         await this.permissionRepository.save(defaultPermission)
         userSaveResponse.permissions = [ defaultPermission ]
 
-        return userSaveResponse
+        return new AuthToken(userSaveResponse.generateAuthToken())
     }
 
     @FieldResolver()
