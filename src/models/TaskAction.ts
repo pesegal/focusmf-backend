@@ -19,7 +19,7 @@ export class TaskAction {
 
     @Field(type => Task)
     @ManyToOne(type => Task, task => task.taskActions)
-    task!: Task[]
+    task!: Task
 
     @Field()
     @Column()

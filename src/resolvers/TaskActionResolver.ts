@@ -2,6 +2,7 @@ import { Resolver, Authorized, Query, Ctx, Field, FieldResolver, Root } from "ty
 import { TaskAction } from "../models/TaskAction";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { User } from "../models/User";
+import { Task } from "../models/Task";
 import { Repository } from "typeorm";
 
 @Resolver(of => TaskAction)
