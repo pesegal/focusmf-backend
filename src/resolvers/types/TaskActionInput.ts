@@ -9,7 +9,7 @@ export class CreateTaskAction implements Partial<TaskAction> {
     taskId!: string
 
     @Field()
-    @IsDate()
+    @IsDate() // graphql defaults to isoDate format which includes timezones.
     start!: Date
 
     @Field()
