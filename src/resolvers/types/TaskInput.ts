@@ -1,7 +1,6 @@
 import { InputType, Field, ID } from "type-graphql";
 import { Task } from "../../models/Task";
 import { MaxLength, IsUUID, IsInt, IsArray } from "class-validator";
-import { string } from "joi";
 
 
 @InputType({ description: "Input format for creating a new task" })
