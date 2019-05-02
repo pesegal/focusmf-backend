@@ -9,12 +9,13 @@ import { HelloWorldResolver } from "./resolvers/HelloWorld"
 import { UserResolver } from "./resolvers/UserResolver"
 import { tokenAuthorization, getDataFromToken } from "./middleware/Authorization"
 import { logger } from "./middleware/Logger"
-import { GraphQLError } from "graphql";
-import { ListResolver } from "./resolvers/ListResolver";
-import { User } from "./models/User";
-import { DefaultData } from "./helpers/DefaultData";
-import { ProjectResolver } from "./resolvers/ProjectResolver";
+import { GraphQLError } from "graphql"
+import { ListResolver } from "./resolvers/ListResolver"
+import { User } from "./models/User"
+import { DefaultData } from "./helpers/DefaultData"
+import { ProjectResolver } from "./resolvers/ProjectResolver"
 import { TaskResolver } from "./resolvers/TaskResolver"
+import { TaskActionResolver } from "./resolvers/TaskActionResolver"
 
 // Register the dependency injection container with typeORM & typeGraphQL
 TypeOrm.useContainer(Container)
@@ -54,7 +55,14 @@ async function startup() {
     await defaultData.initDefaultColorData()
 
     const schema = await TypeGraphQL.buildSchema({
-      resolvers: [HelloWorldResolver, UserResolver, ListResolver, ProjectResolver, TaskResolver],
+      resolvers: [
+        HelloWorldResolver,
+        UserResolver,
+        ListResolver,
+        ProjectResolver,
+        TaskResolver,
+        TaskActionResolver
+      ],
       authChecker: tokenAuthorization
     })
 
