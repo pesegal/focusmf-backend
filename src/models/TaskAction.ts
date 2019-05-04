@@ -9,15 +9,17 @@ export class TaskAction {
     @PrimaryGeneratedColumn('uuid')
     id!: string
 
-    @Column({ type: "timestamp" })
+    @Field()
+    @Column({ type: "timestamptz" })
     start!: Date
 
-    @Column({ type: "timestamp" })
+    @Field()
+    @Column({ type: "timestamptz" })
     end!: Date
 
     @Field(type => Task)
     @ManyToOne(type => Task, task => task.taskActions)
-    task!: Task[]
+    task!: Task
 
     @Field()
     @Column()
