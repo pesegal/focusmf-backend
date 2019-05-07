@@ -6,7 +6,7 @@
         "password": "focus",
         "database": "focusmf",
         "synchronize": true,
-        "logLevel": "none"
+        "logLevel": "debug"
     },
     "port": "3000",
     "logRequests": true,

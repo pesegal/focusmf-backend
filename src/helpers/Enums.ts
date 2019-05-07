@@ -4,58 +4,64 @@ import { registerEnumType } from "type-graphql";
  * This file contains the defined enumerations that we will define for our data.
  */
 
-enum Gender {
-    Male,
-    Female,
-    Other
+export enum Gender {
+    Undefined = "",
+    Male = "Male",
+    Female = "Female",
+    Other = "Other"
 }
 
-enum EthicOrigin {
-    White,
-    HispanicLatino,
-    Black,
-    NativeAmerica,
-    AsianPacIslander,
-    Other    
+export enum EthnicOrigin {
+    Undefined = "",
+    White = "White",
+    HispanicLatino = "HispanicLatino",
+    Black = "Black",
+    NativeAmerica = "NativeAmerican",
+    AsianPacificIslander = "AsiaPacificIslander",
+    Other = "Other"   
 }
 
-enum Education {
-    LessThenHighSchool,
-    HighSchoolDiploma,
-    NoDegree,
-    AssociatesDegree,
-    BachelorsDegree,
-    MastersDegree,
-    DoctoralDegree,
-    ProfessionalDegree
+export enum Education {
+    Undefined = "",
+    LessThenHighSchool = "LessThenHighSchool",
+    HighSchoolDiploma = "HighSchoolDiploma",
+    NoDegree = "NoDegree",
+    AssociatesDegree = "AssociatesDegres",
+    BachelorsDegree = "BatchelorsDegree",
+    MastersDegree = "MastersDegree",
+    DoctoralDegree = "DoctoralDegree",
+    ProfessionalDegree = "ProfessionalDegree"
 }
 
-enum Household {
-    Unmarried,
-    Married,
-    Widowed,
-    Divorced,
-    Separated
+export enum Household {
+    Undefined = "",
+    Unmarried = "Unmarried",
+    Married = "Married",
+    Widowed = "Widowed",
+    Divorced = "Divorced",
+    Separated = "Separated"
 }
 
-enum Employment {
-    EmployedFull,
-    EmployedPart,
-    EmployedSelf,
-    Unemployed,
-    Homemaker,
-    Student,
-    Military,
-    Retired
+export enum Employment {
+    Undefined = "",
+    EmployedFull = "EmployedFull",
+    EmployedPart = "EmployedPart",
+    EmployedSelf = "EmployedSelf",
+    Unemployed = "Unemployed",
+    Homemaker = "Homemaker",
+    Student = "Student",
+    Military = "Military",
+    Retired = "Retired"
 }
 
-enum Usage {
-    ImproveHabits,
-    Introspection,
-    DailyTasks,
-    CreativeWork,
-    TechnicalWork,
-    ProfessionalWork
+export enum Usage {
+    Undefined = "",
+    ImproveHabits = "ImproveHabits",
+    Introspection = "Introspection",
+    DailyTasks = "DailyTasks",
+    CreativeWork = "CreativeWork",
+    TechnicalWork = "TechnicalWork",
+    ProfessionalWork = "ProfessionalWork"
 }
 
 registerEnumType(Gender, {
@@ -63,7 +69,7 @@ registerEnumType(Gender, {
 })
 
 
-registerEnumType(EthicOrigin, {
+registerEnumType(EthnicOrigin, {
     name: "Ethnic Origin"
 })
 

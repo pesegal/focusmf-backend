@@ -6,6 +6,7 @@ import { ObjectType, Field, ID } from "type-graphql"
 import { List } from './List'
 import { Project } from "./Project"
 import { Task } from "./Task"
+import { Gender, EthnicOrigin, Education, Household, Employment, Usage } from "../helpers/Enums";
 
 /**
  * The User entity stores user accounts, and is used for authentication and authorization procedures.
@@ -62,6 +63,60 @@ export class User {
         nullable: true
     })
     dateofbirth!: Date
+
+    @Field(type => Gender)
+    @Column({ 
+        nullable: true,
+        type: "enum",
+        enum: Gender,
+        default: Gender.Undefined
+    })
+    gender!: Gender
+
+    @Field(type => EthnicOrigin)
+    @Column({ 
+        nullable: true,
+        type: "enum",
+        enum: EthnicOrigin,
+        default: EthnicOrigin.Undefined
+    })
+    ethnic_origin!: EthnicOrigin
+
+    @Field(type => Education)
+    @Column({ 
+        nullable: true,
+        type: "enum",
+        enum: Education,
+        default: Education.Undefined
+    })
+    education!: Education
+
+    @Field(type => Household)
+    @Column({ 
+        nullable: true,
+        type: "enum",
+        enum: Household,
+        default: Household.Undefined
+    })
+    household!: Household
+
+    @Field(type => Employment)
+    @Column({ 
+        nullable: true,
+        type: "enum",
+        enum: Employment,
+        default: Employment.Undefined
+    })
+    employment!: Employment
+
+    @Field(type => Usage)
+    @Column({ 
+        nullable: true,
+        type: "enum",
+        enum: Usage,
+        default: Usage.Undefined
+    })
+    usage!: Usage
 
     @Field(type => [Permission])
     @OneToMany(type => Permission, permission => permission.user, { eager: true })
