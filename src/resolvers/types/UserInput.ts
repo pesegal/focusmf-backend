@@ -1,6 +1,6 @@
 import { InputType, Field } from "type-graphql";
 import { User } from "../../models/User";
-import { Length, IsEmail, Max, IsDateString } from "class-validator";
+import { Length, IsEmail, Max, IsDate } from "class-validator";
 
 @InputType({ description: "Create User Input" })
 export class UserInput implements Partial<User> {
@@ -14,14 +14,14 @@ export class UserInput implements Partial<User> {
     password!: string
 
     @Field({ nullable: true, description: "Max Length 50 chars." })
-    @Max(50)
+    @Length(0, 50)
     first_name?: string
 
     @Field({ nullable: true, description: "Max Length 50 chars." })
-    @Max(50)
+    @Length(0, 50)
     last_name?: string
 
     @Field({ nullable: true, description: "Needs to be a valid date string." })
-    @IsDateString()
+    @IsDate()
     dateofbirth?: Date
 }
