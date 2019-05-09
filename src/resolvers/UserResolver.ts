@@ -2,7 +2,7 @@ import { InjectRepository } from "typeorm-typedi-extensions"
 import { User } from "../models/User";
 import { Repository } from "typeorm";
 import { Permission } from "../models/Permission";
-import { Resolver, Query, FieldResolver, Root, Arg, Mutation } from "type-graphql";
+import { Resolver, Query, FieldResolver, Root, Arg, Mutation, ResolverInterface } from "type-graphql";
 import { UserInput } from "./types/UserInput";
 import bcrypt from "bcrypt"
 import { AuthToken } from "./types/AuthToken";
@@ -10,7 +10,7 @@ import { AuthInput } from "./types/AuthInput";
 import { List } from "../models/List";
 
 @Resolver(of => User)
-export class UserResolver {
+export class UserResolver implements ResolverInterface<User> {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         @InjectRepository(Permission) private readonly permissionRepository: Repository<Permission>,
@@ -18,18 +18,25 @@ export class UserResolver {
      ) {}
 
     @Query(returns => [User]) //TODO: Make this require administrator authorization
-    allUsers(): Promise<User[]> {
-        return this.userRepository.find();
+    async allUsers(): Promise<User[]> {
+        const users = await this.userRepository.find();
+        // explicit date conversion required due to TypeORM hydration behavior with date type.
+        users.forEach(user => user.dateofbirth = new Date(user.dateofbirth)) // potential performance issue?
+        return users
     }
 
     @Query(returns => User)
-    async findUserById(@Arg("userId") userId: string): Promise<User | undefined> {
-        return this.userRepository.findOne({ id: userId });
+    async findUserById(@Arg("userId") userId: string): Promise<User> {
+        const user = await this.userRepository.findOneOrFail({ id: userId })
+        user.dateofbirth = new Date(user.dateofbirth)
+        return user
     }
 
     @Query(returns => User)
-    async findUserByEmail(@Arg("userEmail") userEmail: string): Promise<User | undefined> {
-        return this.userRepository.findOne({ email: userEmail });
+    async findUserByEmail(@Arg("userEmail") userEmail: string): Promise<User> {
+        const user = await this.userRepository.findOneOrFail({ email: userEmail })
+        user.dateofbirth = new Date(user.dateofbirth)
+        return user
     }
 
     @Query(returns => AuthToken)
