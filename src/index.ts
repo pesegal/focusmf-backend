@@ -75,7 +75,7 @@ async function startup() {
           user = await TypeOrm.getRepository(User).findOneOrFail({ id: authToken!.id })
           return { authToken, user }
         } catch (e) {
-          logger.error(`Unable to create an authenticated Context with auth token as ${authToken}`)
+          logger.debug(`Unable to create an authenticated Context with auth token as: ${authToken}`)
           return {}
         }
       },
