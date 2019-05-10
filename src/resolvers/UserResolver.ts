@@ -63,6 +63,8 @@ export class UserResolver implements ResolverInterface<User> {
         
         return new AuthToken(userSaveResponse.generateAuthToken())
     }
+
+    // TODO: Add user update mutation
     
     @FieldResolver()
     async permissions(@Root() user: User): Promise<Permission[]> {
