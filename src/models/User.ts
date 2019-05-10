@@ -64,58 +64,28 @@ export class User {
     })
     dateofbirth!: Date
 
-    @Field(type => Gender)
-    @Column({ 
-        nullable: true,
-        type: "enum",
-        enum: Gender,
-        default: Gender.Undefined
-    })
+    @Field(type => Gender, { nullable: true })
+    @Column({ nullable: true })
     gender!: Gender
 
-    @Field(type => EthnicOrigin)
-    @Column({ 
-        nullable: true,
-        type: "enum",
-        enum: EthnicOrigin,
-        default: EthnicOrigin.Undefined
-    })
+    @Field(type => EthnicOrigin, { nullable: true })
+    @Column({ nullable: true })
     ethnic_origin!: EthnicOrigin
 
-    @Field(type => Education)
-    @Column({ 
-        nullable: true,
-        type: "enum",
-        enum: Education,
-        default: Education.Undefined
-    })
+    @Field(type => Education, { nullable: true })
+    @Column({ nullable: true })
     education!: Education
 
-    @Field(type => Household)
-    @Column({ 
-        nullable: true,
-        type: "enum",
-        enum: Household,
-        default: Household.Undefined
-    })
+    @Field(type => Household, { nullable: true })
+    @Column({ nullable: true })
     household!: Household
 
-    @Field(type => Employment)
-    @Column({ 
-        nullable: true,
-        type: "enum",
-        enum: Employment,
-        default: Employment.Undefined
-    })
+    @Field(type => Employment, { nullable: true })
+    @Column({ nullable: true })
     employment!: Employment
 
-    @Field(type => Usage)
-    @Column({ 
-        nullable: true,
-        type: "enum",
-        enum: Usage,
-        default: Usage.Undefined
-    })
+    @Field(type => Usage, { nullable: true })
+    @Column({ nullable: true })
     usage!: Usage
 
     @Field(type => [Permission])
