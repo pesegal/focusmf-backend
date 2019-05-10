@@ -2,10 +2,10 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 import { Permission } from "./Permission"
 import jwt from "jsonwebtoken"
 import config from "config"
-import { ObjectType, Field, ID } from "type-graphql";
+import { ObjectType, Field, ID } from "type-graphql"
 import { List } from './List'
-import { Project } from "./Project";
-import { Task } from "./Task";
+import { Project } from "./Project"
+import { Task } from "./Task"
 
 /**
  * The User entity stores user accounts, and is used for authentication and authorization procedures.
