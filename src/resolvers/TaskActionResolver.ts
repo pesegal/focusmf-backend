@@ -1,10 +1,10 @@
 import { Resolver, Authorized, Query, Ctx, Field, FieldResolver, Root, Mutation, Arg } from "type-graphql";
-import { TaskAction } from "../models/TaskAction";
-import { InjectRepository } from "typeorm-typedi-extensions";
-import { User } from "../models/User";
-import { Task } from "../models/Task";
-import { Repository } from "typeorm";
-import { CreateTaskAction } from "./types/TaskActionInput";
+import { TaskAction } from "../models/TaskAction"
+import { InjectRepository } from "typeorm-typedi-extensions"
+import { User } from "../models/User"
+import { Task } from "../models/Task"
+import { Repository } from "typeorm"
+import { CreateTaskAction } from "./types/TaskActionInput"
 
 @Resolver(of => TaskAction)
 export class TaskActionResolver {
