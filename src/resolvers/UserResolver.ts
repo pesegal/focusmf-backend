@@ -19,26 +19,19 @@ export class UserResolver implements ResolverInterface<User> {
 
     @Query(returns => [User]) //TODO: Make this require administrator authorization
     async allUsers(): Promise<User[]> {
-        const users = await this.userRepository.find();
-        // explicit date conversion required due to TypeORM hydration behavior with date type.
-        users.forEach(user => user.dateofbirth = new Date(user.dateofbirth)) // potential performance issue?
-        return users
+        return this.userRepository.find()
     }
-
+    
     @Query(returns => User)
     async findUserById(@Arg("userId") userId: string): Promise<User> {
-        const user = await this.userRepository.findOneOrFail({ id: userId })
-        user.dateofbirth = new Date(user.dateofbirth)
-        return user
+        return this.userRepository.findOneOrFail({ id: userId })      
     }
-
+    
     @Query(returns => User)
     async findUserByEmail(@Arg("userEmail") userEmail: string): Promise<User> {
-        const user = await this.userRepository.findOneOrFail({ email: userEmail })
-        user.dateofbirth = new Date(user.dateofbirth)
-        return user
+        return this.userRepository.findOneOrFail({ email: userEmail })
     }
-
+    
     @Query(returns => AuthToken)
     async loginUser(@Arg("loginData") loginData: AuthInput): Promise<AuthToken> {
         const user = await this.userRepository.findOneOrFail({ email: loginData.email })
@@ -46,33 +39,39 @@ export class UserResolver implements ResolverInterface<User> {
         if (!validPassword) throw new Error("Invalid password.")
         return new AuthToken(user.generateAuthToken())
     }
-
+    
     @Mutation(returns => AuthToken) // TODO: Look into how to do transactions
     async createUser(@Arg("userData") newUserData: UserInput): Promise<AuthToken> {
         // Hash Password
         const salt = await bcrypt.genSalt(10);
         newUserData.password = await bcrypt.hash(newUserData.password, salt)
-
+        
         // Generate User Object and set default Permission
         const user = this.userRepository.create(newUserData)
         const userSaveResponse = await this.userRepository.save(user)
-
+        
         userSaveResponse.lists = await this.listRepository.save([
             this.listRepository.create({
                 name: 'default_list', user: userSaveResponse
             })
         ])
-
+        
         const defaultPermission = this.permissionRepository.create()
         defaultPermission.user = userSaveResponse
         await this.permissionRepository.save(defaultPermission)
         userSaveResponse.permissions = [ defaultPermission ]
-
+        
         return new AuthToken(userSaveResponse.generateAuthToken())
     }
-
+    
     @FieldResolver()
     async permissions(@Root() user: User): Promise<Permission[]> {
         return (await this.permissionRepository.find({user}))
+    }
+    
+    @FieldResolver()
+    dateofbirth(@Root() user: User): Date {
+        // explicit date conversion required due to TypeORM hydration behavior with date type.
+        return new Date(user.dateofbirth)
     }
 }
