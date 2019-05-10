@@ -5,14 +5,12 @@ import { registerEnumType } from "type-graphql";
  */
 
 export enum Gender {
-    Undefined = "",
     Male = "Male",
     Female = "Female",
     Other = "Other"
 }
 
 export enum EthnicOrigin {
-    Undefined = "",
     White = "White",
     HispanicLatino = "HispanicLatino",
     Black = "Black",
@@ -22,7 +20,6 @@ export enum EthnicOrigin {
 }
 
 export enum Education {
-    Undefined = "",
     LessThenHighSchool = "LessThenHighSchool",
     HighSchoolDiploma = "HighSchoolDiploma",
     NoDegree = "NoDegree",
@@ -34,7 +31,6 @@ export enum Education {
 }
 
 export enum Household {
-    Undefined = "",
     Unmarried = "Unmarried",
     Married = "Married",
     Widowed = "Widowed",
@@ -43,7 +39,6 @@ export enum Household {
 }
 
 export enum Employment {
-    Undefined = "",
     EmployedFull = "EmployedFull",
     EmployedPart = "EmployedPart",
     EmployedSelf = "EmployedSelf",
@@ -55,7 +50,6 @@ export enum Employment {
 }
 
 export enum Usage {
-    Undefined = "",
     ImproveHabits = "ImproveHabits",
     Introspection = "Introspection",
     DailyTasks = "DailyTasks",
@@ -65,26 +59,32 @@ export enum Usage {
 }
 
 registerEnumType(Gender, {
-    name: "Gender"
+    name: "Gender",
+    description: "User's identified gender."
 })
 
 
 registerEnumType(EthnicOrigin, {
-    name: "Ethnic Origin"
+    name: "EthnicOrigin",
+    description: "User's identified ethnic ancestry."
 })
 
 registerEnumType(Education, {
-    name: "Education"
+    name: "Education",
+    description: "User's identified educational achievement level."
 })
 
 registerEnumType(Household, {
-    name: "Household Status"
+    name: "Household",
+    description: "User's identified household status."
 })
 
 registerEnumType(Employment, {
-    name: "Employement Level"
+    name: "Employement",
+    description: "User's identified level of employment."
 })
 
 registerEnumType(Usage, {
-    name: "Primary Usage Reason"
+    name: "Usage",
+    description: "User's identified reason for sign-up."
 })
