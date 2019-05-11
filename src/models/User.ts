@@ -92,11 +92,11 @@ export class User {
     @OneToMany(type => Permission, permission => permission.user, { eager: true })
     permissions!: Permission[]
 
-    @Field(type => [Project])
+    @Field(type => [Project], { nullable: true })
     @OneToMany(type => Project, project => project.user)
     projects!: Project[]
 
-    @Field(type => [Task!])
+    @Field(type => [Task], { nullable: true })
     @OneToMany(type => Task, task => task.user)
     tasks!: Task[]
 
