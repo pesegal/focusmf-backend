@@ -64,7 +64,8 @@ async function startup() {
         TaskResolver,
         TaskActionResolver
       ],
-      authChecker: tokenAuthorization
+      authChecker: tokenAuthorization,
+      emitSchemaFile: true
     })
 
     const server = new ApolloServer({
