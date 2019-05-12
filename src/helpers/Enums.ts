@@ -12,22 +12,22 @@ export enum Gender {
 
 export enum EthnicOrigin {
     White = "White",
-    HispanicLatino = "HispanicLatino",
+    HispanicLatino = "Hispanic Latino",
     Black = "Black",
-    NativeAmerica = "NativeAmerican",
-    AsianPacificIslander = "AsiaPacificIslander",
-    Other = "Other"   
+    NativeAmerica = "Native American",
+    AsianPacificIslander = "Asian / Pacific Islander",
+    Other = "Other"
 }
 
 export enum Education {
-    LessThenHighSchool = "LessThenHighSchool",
-    HighSchoolDiploma = "HighSchoolDiploma",
-    NoDegree = "NoDegree",
-    AssociatesDegree = "AssociatesDegres",
-    BachelorsDegree = "BatchelorsDegree",
-    MastersDegree = "MastersDegree",
-    DoctoralDegree = "DoctoralDegree",
-    ProfessionalDegree = "ProfessionalDegree"
+    LessThanHighSchool = "Less Than High School",
+    HighSchoolDiploma = "High School Diploma",
+    NoDegree = "No Degree",
+    AssociatesDegree = "Associates Degres",
+    BachelorsDegree = "Batchelors Degree",
+    MastersDegree = "Masters Degree",
+    DoctoralDegree = "Doctoral Degree",
+    ProfessionalDegree = "Professional Degree"
 }
 
 export enum Household {
@@ -39,9 +39,9 @@ export enum Household {
 }
 
 export enum Employment {
-    EmployedFull = "EmployedFull",
-    EmployedPart = "EmployedPart",
-    EmployedSelf = "EmployedSelf",
+    EmployedFull = "Employed Full",
+    EmployedPart = "Employed Part",
+    EmployedSelf = "Employed Self",
     Unemployed = "Unemployed",
     Homemaker = "Homemaker",
     Student = "Student",
@@ -50,12 +50,12 @@ export enum Employment {
 }
 
 export enum Usage {
-    ImproveHabits = "ImproveHabits",
+    ImproveHabits = "Improve Habits",
     Introspection = "Introspection",
-    DailyTasks = "DailyTasks",
-    CreativeWork = "CreativeWork",
-    TechnicalWork = "TechnicalWork",
-    ProfessionalWork = "ProfessionalWork"
+    DailyTasks = "Daily Tasks",
+    CreativeWork = "Creative Work",
+    TechnicalWork = "Technical Work",
+    ProfessionalWork = "Professional Work"
 }
 
 registerEnumType(Gender, {
