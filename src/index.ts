@@ -16,6 +16,7 @@ import { DefaultData } from "./helpers/DefaultData"
 import { ProjectResolver } from "./resolvers/ProjectResolver"
 import { TaskResolver } from "./resolvers/TaskResolver"
 import { TaskActionResolver } from "./resolvers/TaskActionResolver"
+import "./helpers/Enums"
 
 // Register the dependency injection container with typeORM & typeGraphQL
 TypeOrm.useContainer(Container)
@@ -63,7 +64,8 @@ async function startup() {
         TaskResolver,
         TaskActionResolver
       ],
-      authChecker: tokenAuthorization
+      authChecker: tokenAuthorization,
+      emitSchemaFile: true
     })
 
     const server = new ApolloServer({

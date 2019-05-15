@@ -6,6 +6,7 @@ import { ObjectType, Field, ID } from "type-graphql"
 import { List } from './List'
 import { Project } from "./Project"
 import { Task } from "./Task"
+import { Gender, EthnicOrigin, Education, Household, Employment, Usage } from "../helpers/Enums";
 
 /**
  * The User entity stores user accounts, and is used for authentication and authorization procedures.
@@ -63,15 +64,39 @@ export class User {
     })
     dateofbirth!: Date
 
+    @Field(type => Gender, { nullable: true })
+    @Column({ nullable: true })
+    gender!: Gender
+
+    @Field(type => EthnicOrigin, { nullable: true })
+    @Column({ nullable: true })
+    ethnic_origin!: EthnicOrigin
+
+    @Field(type => Education, { nullable: true })
+    @Column({ nullable: true })
+    education!: Education
+
+    @Field(type => Household, { nullable: true })
+    @Column({ nullable: true })
+    household!: Household
+
+    @Field(type => Employment, { nullable: true })
+    @Column({ nullable: true })
+    employment!: Employment
+
+    @Field(type => Usage, { nullable: true })
+    @Column({ nullable: true })
+    usage!: Usage
+
     @Field(type => [Permission])
     @OneToMany(type => Permission, permission => permission.user, { eager: true })
     permissions!: Permission[]
 
-    @Field(type => [Project])
+    @Field(type => [Project], { nullable: true })
     @OneToMany(type => Project, project => project.user)
     projects!: Project[]
 
-    @Field(type => [Task!])
+    @Field(type => [Task], { nullable: true })
     @OneToMany(type => Task, task => task.user)
     tasks!: Task[]
 

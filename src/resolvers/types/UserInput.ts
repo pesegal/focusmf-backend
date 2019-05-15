@@ -1,6 +1,7 @@
 import { InputType, Field } from "type-graphql"
 import { User } from "../../models/User"
-import { Length, IsEmail, Max, IsDate } from "class-validator"
+import { Length, IsEmail, IsDate } from "class-validator"
+import { Gender, Education, EthnicOrigin, Household, Employment, Usage } from "../../helpers/Enums";
 
 @InputType({ description: "Create User Input" })
 export class UserInput implements Partial<User> {
@@ -24,4 +25,22 @@ export class UserInput implements Partial<User> {
     @Field({ nullable: true, description: "Needs to be a valid date string." })
     @IsDate()
     dateofbirth?: Date
+
+    @Field(type => Gender, { nullable: true })
+    gender?: Gender
+
+    @Field(type => EthnicOrigin, { nullable: true })
+    ethnic_origin?: EthnicOrigin    
+
+    @Field(type => Education, { nullable:  true })
+    education?: Education
+
+    @Field(type => Household, { nullable: true })
+    household?: Household
+
+    @Field(type => Employment, { nullable: true })
+    employment?: Employment
+
+    @Field(type => Usage, { nullable: true })
+    usage?: Usage
 }
