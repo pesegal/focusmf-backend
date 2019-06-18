@@ -1,10 +1,9 @@
-import { Resolver, Mutation, Arg, Authorized, Ctx, Query } from "type-graphql"
+import { Resolver, Mutation, Arg, Authorized, Ctx, Query, Field, Root, FieldResolver } from "type-graphql"
 import { List } from "../models/List"
 import { User } from "../models/User"
 import { InjectRepository } from "typeorm-typedi-extensions"
 import { Repository } from "typeorm"
 import { Task } from "../models/Task"
-import { listenerCount } from "cluster";
 
 @Resolver(of => List)
 export class ListResolver {
@@ -55,4 +54,11 @@ export class ListResolver {
   async findListsByUser(@Ctx("user") user: User): Promise<List[]> {
     return this.listRepository.find({ where: { deleted_timestamp: null, user }})
   }
+
+  @FieldResolver()
+  async tasks(@Root() list: List): Promise<Task[]> {
+    return this.taskRepository.find({ where: { deleted_timestamp: null, list }})
+  }
+
+
 }
