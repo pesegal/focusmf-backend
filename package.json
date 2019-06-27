@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Rest API backend for Focus.MF project.",
   "main": "index.js",
+  "engines": {
+    "node": ">=10.15.3"
+  },
   "scripts": {
     "compile": "rm -r dist && tsc",
     "start": "ts-node src/index.ts",
