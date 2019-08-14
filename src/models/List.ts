@@ -35,4 +35,8 @@ export class List {
   @Field(type => Task)
   @OneToMany(type => Task, task => task.list)
   tasks!: Task[]
+
+  @Field()
+  @Column({ default: 0 })
+  position!: number
 }
