@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, VersionColumn, OneToMany } from "typeorm"
 import { Permission } from "./Permission"
 import jwt from "jsonwebtoken"
-import config from "config"
+import config from "../config"
 import { ObjectType, Field, ID } from "type-graphql"
 import { List } from './List'
 import { Project } from "./Project"
@@ -102,7 +102,7 @@ export class User {
 
     public generateAuthToken(): string {
         const permissionStrings = this.permissions.map(p => p.permission)
-        const token = jwt.sign({id: this.id, per: permissionStrings}, config.get("jwtPrivateKey"))
+        const token = jwt.sign({id: this.id, per: permissionStrings}, config.JWT_PRIVATE_KEY)
         return token
     }
 

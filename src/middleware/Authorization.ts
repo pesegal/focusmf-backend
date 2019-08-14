@@ -1,5 +1,5 @@
 import {AuthChecker} from "type-graphql"
-import config from "config"
+import config from "../config"
 import jwt from "jsonwebtoken"
 import _ from "lodash"
 
@@ -18,7 +18,7 @@ export interface AuthToken {
  */
 export function getDataFromToken(authToken: string | undefined): AuthToken | undefined {
     if(authToken) {
-        return jwt.verify(authToken, config.get('jwtPrivateKey')) as AuthToken
+        return jwt.verify(authToken, config.JWT_PRIVATE_KEY) as AuthToken
     }
 }
 

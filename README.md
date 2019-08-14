@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/pesegal/focusmf-backend.svg?style=svg&circle-token=fa818adeeb0b20dd5ee57f1d477eb83b79de9b92)](https://circleci.com/gh/pesegal/focusmf-backend)
+
 # Focus.MF Backend API
 This project is the backend services for the Focus.MF project. The service hosts a graphql playground instance at it's root.
 
@@ -58,9 +60,7 @@ npm run test:watch
 ```
 
 ## Deployment Notes
-Make sure you run this service with the `NODE_ENV=prod` set so that the application will correctly validate the jwtSecretKey environment variable.
-
-See the `config/custom-environment-variables.json` file for exposed environment variables for deployment.
+Once merged to the master branch the CircleCI configuration will deploy this project automatically to the server and build the project there. All the configuration values are stored inside environment variables for production. The server is using a tool called PM2 to manage the node instance. It is setup to watch the directory that this project gets deployed to and to automatically rerun the project.
 
 ## Database Persistance
 

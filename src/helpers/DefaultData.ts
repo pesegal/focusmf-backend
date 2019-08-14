@@ -2,12 +2,12 @@ import { InjectRepository } from "typeorm-typedi-extensions";
 import { Color } from "../models/Color";
 import { Repository } from "typeorm";
 import { logger } from "../middleware/Logger"
-import config from "config"
+import config from "../config"
 import { Service } from "typedi";
 
 
-export const defaultColorName = config.get("defaultProjectColorName") as string
-export const defaultColorHex = config.get("defaultProjectColorValue") as string
+export const defaultColorName = config.DEFAULT_PROJECT_COLOR_NAME as string
+export const defaultColorHex = config.DEFAULT_PROJECT_COLOR_VALUE as string
 
 /**
  * DefaultData class is used to check and populate default data if it doesn't

@@ -10,7 +10,7 @@
   "entities": [
       "src/models/*"
   ],
-  "migrationsTableName": "focusmf_migration_table",
+  "migrationsTableName": "focusmf_migrations",
   "migrations": ["src/migration/*.ts"],
   "cli": {
       "migrationsDir": "src/migration"
