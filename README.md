@@ -91,8 +91,11 @@ docker run -d -p 5435:5432 --name focusmf-postgres-container focusmf-postgres-im
 ```
 
 ### Migrations
-# TODO
-To run migrations:
 ```bash
+# Perform the migrations
+npm run typeorm migration:run
+
+# Reverse the migrations
+npm run typeorm migration:revert
 ```
 ---
