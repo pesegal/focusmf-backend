@@ -1,0 +1,18 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "focus",
+  "password": "focus",
+  "database": "focusmf",
+  "synchronize": false,
+  "logLevel": "debug",
+  "entities": [
+      "src/models/*"
+  ],
+  "migrationsTableName": "focusmf_migration_table",
+  "migrations": ["src/migration/*.ts"],
+  "cli": {
+      "migrationsDir": "src/migration"
+  }
+}
