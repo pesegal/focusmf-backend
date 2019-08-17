@@ -90,4 +90,12 @@ You can now connect to the running Postgres instance via `localhost:5432` on the
 docker run -d -p 5435:5432 --name focusmf-postgres-container focusmf-postgres-image
 ```
 
+### Migrations
+```bash
+# Perform the migrations
+npm run typeorm migration:run
+
+# Reverse the migrations
+npm run typeorm migration:revert
+```
 ---

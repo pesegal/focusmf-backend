@@ -35,22 +35,8 @@ async function startup() {
   }
 
   try {
-    // Load in the connection config information.
-    let dbConnectionConfig: TypeOrm.ConnectionOptions = {
-      type: 'postgres',
-      host: config.get('dbSettings.host'),
-      port: config.get('dbSettings.port'),
-      username: config.get('dbSettings.username'),
-      password: config.get('dbSettings.password'),
-      database: config.get('dbSettings.database'),
-      synchronize: config.get('dbSettings.synchronize'),
-      entities: [
-        __dirname + "/models/*"
-      ],
-      logging: config.get("dbSettings.logLevel")
-    }
-
-    await TypeOrm.createConnection(dbConnectionConfig)
+    // Pulls the config `ormconfig.json` from root
+    await TypeOrm.createConnection()
     // Check and initialize default data.
     const defaultData: DefaultData = Container.get(DefaultData)
     await defaultData.initDefaultColorData()

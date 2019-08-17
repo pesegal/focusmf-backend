@@ -1,13 +1,4 @@
 {
-    "dbSettings": {
-        "host": "localhost",
-        "port": 5432,
-        "username": "focus",
-        "password": "focus",
-        "database": "focusmf",
-        "synchronize": true,
-        "logLevel": "debug"
-    },
     "port": "3000",
     "logRequests": true,
     "logLevel": "debug",

@@ -17,9 +17,10 @@ export class ListResolver {
   @Mutation(returns => List)
   async createList(
     @Arg("name") name: string,
+    @Arg("position") position: number,
     @Ctx("user") user: User
   ): Promise<List> {
-    const list = this.listRepository.create({ name, user: user })
+    const list = this.listRepository.create({ position, name, user: user })
     const listSaveResponse = await this.listRepository.save(list)
     return listSaveResponse
   }
@@ -29,6 +30,7 @@ export class ListResolver {
   async updateList(
     @Arg('id') id: string,
     @Arg('name') name: string,
+    @Arg('position') position: number,
     @Ctx('user') user: User
   ): Promise<List|null> {
     const list = user.lists.find(list => list.id === id)
@@ -37,7 +39,8 @@ export class ListResolver {
     }
 
     list.name = name
-    await this.listRepository.update(id, { name })
+    list.position = position
+    await this.listRepository.update(id, { name, position })
     return list
   }
 
@@ -52,13 +55,24 @@ export class ListResolver {
   @Authorized()
   @Query(returns => [List])
   async findListsByUser(@Ctx("user") user: User): Promise<List[]> {
-    return this.listRepository.find({ where: { deleted_timestamp: null, user }})
+    return this.listRepository.find({
+      where: {
+        deleted_timestamp: null,
+        user
+      },
+      order: {
+        position: "ASC"
+      }
+    })
   }
 
   @FieldResolver()
   async tasks(@Root() list: List): Promise<Task[]> {
-    return this.taskRepository.find({ where: { deleted_timestamp: null, list }})
+    return this.taskRepository.find({
+      where: {
+        deleted_timestamp: null,
+        list
+      }
+    })
   }
-
-
 }
