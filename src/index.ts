@@ -1,6 +1,6 @@
 import "reflect-metadata" // Required to be imported first for typeDI to work.
 
-import config from "config"
+import config from "./config"
 import { Container } from "typedi"
 import * as TypeOrm from "typeorm"
 import * as TypeGraphQL from "type-graphql"
@@ -28,9 +28,9 @@ TypeGraphQL.useContainer(Container)
 async function startup() {
   logger.info("Initializing Focus.mf Backend")
 
-  const tokenHeaderName: string = config.get('authorizationHeader')
+  const tokenHeaderName: string = config.AUTH_HEADER
   // Confirm the JWT private key is set correctly in production.
-  if (config.util.getEnv('NODE_ENV') === 'prod' && config.get('jwtPrivateKey') === 'devJwtKey') {
+  if (process.env.NODE_ENV === 'production' && config.JWT_PRIVATE_KEY === 'devJwtKey') {
     throw new Error("jwtPrivateKey not set. Set it with environment var 'focusmf_jwtPrivateKey'.")
   }
 
@@ -79,7 +79,7 @@ async function startup() {
       introspection: true
     })
 
-    const { url } = await server.listen(config.get("port"))
+    const { url } = await server.listen(config.PORT)
     logger.info(`Server is running, GraphQL Playground available at ${url}`)
 
   } catch (error) {
@@ -87,4 +87,4 @@ async function startup() {
   }
 }
 
-startup();
+startup()

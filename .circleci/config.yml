@@ -1,9 +1,43 @@
 version: 2.1
+jobs:
+    deploy:
+        machine:
+            image: ubuntu-1604:201903-01
+        steps:
+        - checkout
+        - add_ssh_keys:
+            fingerprints:
+                - "14:c7:1b:11:67:10:00:7e:bd:9f:52:2f:22:53:07:50"
+        # Copy over the projects files to the server
+        - run:
+            name: Create directory on remote server if it doesn't exist
+            command: |
+                ssh focusmf@focusmf.club -t mkdir -p focusmf/backend
 
-orbs:
-    hello: circleci/hello-build@0.0.7 # uses the circleci/buildpack-deps Docker image
+        - run:
+            name: Copy of Source to Server
+            command: |
+                rsync -va . focusmf@focusmf.club:~/focusmf/backend
+
+        - run:
+            name: Install Dependencies
+            command: |
+                ssh focusmf@focusmf.club -t 'cd ~/focusmf/backend ; npm install'
+
+        - run:
+            name: Run TypeORM Migration
+            command: |
+                ssh focusmf@focusmf.club -t 'cd ~/focusmf/backend ; npm run typeorm migration:run'
+
+        - run:
+            name: Build Project
+            command: |
+                ssh focusmf@focusmf.club -t 'cd ~/focusmf/backend ; npm run compile'
 
 workflows:
-    "Hello Workflow":
+    build_and_deploy:
         jobs:
-          - hello/hello-build
+            - deploy:
+                filters:
+                    branches:
+                        only: master

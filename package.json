@@ -1,13 +1,13 @@
 {
-  "name": "focusmf-restapi",
-  "version": "0.0.1",
-  "description": "Rest API backend for Focus.MF project.",
+  "name": "focusmf-api",
+  "version": "0.0.2",
+  "description": "API backend for Focus.MF project.",
   "main": "index.js",
   "engines": {
     "node": ">=10.15.3"
   },
   "scripts": {
-    "compile": "rm -r dist && tsc",
+    "compile": "rm -fr dist && tsc",
     "start": "ts-node src/index.ts",
     "start-dist": "npm run compile && node dist/index.js",
     "dev": "nodemon",
@@ -34,7 +34,6 @@
   "homepage": "https://bitbucket.org/focusmf/focusmf-restapi#readme",
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
-    "@types/config": "0.0.34",
     "@types/express": "^4.16.1",
     "@types/express-winston": "^3.0.1",
     "@types/jest": "^23.3.14",
@@ -46,22 +45,21 @@
     "@types/winston": "^2.4.4",
     "@types/yamljs": "^0.2.30",
     "nodemon": "^1.19.0",
-    "ts-node": "^7.0.1",
     "tslint": "^5.16.0",
+    "@types/graphql": "^14.2.0",
+    "ts-node": "^7.0.1",
     "typescript": "^3.4.5"
   },
   "dependencies": {
-    "@types/graphql": "^14.2.0",
     "apollo-server": "^2.4.8",
     "bcrypt": "^3.0.3",
     "class-validator": "^0.9.1",
-    "config": "^3.1.0",
     "express": "^4.16.4",
     "express-winston": "^3.1.0",
     "graphql": "^14.2.1",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "pg": "^7.10.0",
     "reflect-metadata": "^0.1.13",
     "swagger-ui-express": "^4.0.2",
