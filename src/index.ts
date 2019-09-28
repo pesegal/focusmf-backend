@@ -75,7 +75,7 @@ async function startup() {
         logger.error(error)
         return error
       },
-      playground: true,
+      playground: process.env.NODE_ENV !== 'production',
       introspection: true
     })
 
