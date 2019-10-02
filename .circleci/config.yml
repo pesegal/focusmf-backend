@@ -23,7 +23,6 @@ jobs:
         machine:
             image: ubuntu-1604:201903-01
         steps:
-            - checkout
             - add_ssh_keys:
                 fingerprints:
                     - "14:c7:1b:11:67:10:00:7e:bd:9f:52:2f:22:53:07:50"
