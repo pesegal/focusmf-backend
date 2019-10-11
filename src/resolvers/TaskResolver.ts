@@ -73,7 +73,7 @@ export class TaskResolver {
     @FieldResolver()
     async projects(@Root() task: Task): Promise<Project[]> {
         const taskEntity = await this.taskRepository.findOneOrFail(task.id, { relations: ['projects'] })
-        return taskEntity.projects
+        return taskEntity.projects.filter(project => project.deleted_timestamp === null)
     }
 
     @FieldResolver()
