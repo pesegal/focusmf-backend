@@ -3,7 +3,7 @@ import { TaskAction } from "../models/TaskAction"
 import { InjectRepository } from "typeorm-typedi-extensions"
 import { User } from "../models/User"
 import { Task } from "../models/Task"
-import { Repository } from "typeorm"
+import { Repository, LessThanOrEqual, MoreThanOrEqual} from "typeorm"
 import { CreateTaskAction } from "./types/TaskActionInput"
 
 @Resolver(of => TaskAction)
@@ -17,6 +17,22 @@ export class TaskActionResolver {
     @Query(returns => [TaskAction])
     async getAllTaskActions(@Ctx('user') user: User): Promise<TaskAction[]> {
         return this.taskActionRepository.find({ relations: ['task'], where: { user: user }})
+    }
+
+    @Authorized()
+    @Query(returns => [TaskAction])
+    async getRangeTaskActions(@Arg('start') start: Date, @Arg('end') end: Date, @Ctx('user') user: User): Promise<TaskAction[]> {
+        return this.taskActionRepository.find({
+            relations: ['task'], 
+            where: { 
+                user: user,
+                start: MoreThanOrEqual(start),
+                end: LessThanOrEqual(end)           
+            },
+            order: {
+                start: "ASC"
+            }        
+        })
     }
 
     @Authorized()
