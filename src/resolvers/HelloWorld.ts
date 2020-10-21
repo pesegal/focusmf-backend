@@ -3,7 +3,6 @@ import { Resolver, FieldResolver, Query, Authorized } from "type-graphql";
 
 @Resolver(of => HelloWorld)
 export class HelloWorldResolver {
-    @Authorized() // Just requires a valid jwt token
     @Query(returns => HelloWorld)
     hello(): HelloWorld {
         return new HelloWorld()

@@ -20,7 +20,6 @@ import "./helpers/Enums"
 
 // Register the dependency injection container with typeORM & typeGraphQL
 TypeOrm.useContainer(Container)
-TypeGraphQL.useContainer(Container)
 
 /**
  * This function initializes the database, server, and logger.
@@ -51,7 +50,8 @@ async function startup() {
         TaskActionResolver
       ],
       authChecker: tokenAuthorization,
-      emitSchemaFile: true
+      emitSchemaFile: true,
+      container: Container
     })
 
     const server = new ApolloServer({
