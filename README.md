@@ -8,13 +8,13 @@ This project is the backend services for the Focus.MF project. The service hosts
 Install Node Version manager for easier management of node packages:
 
 ```bash
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
 ```
 
-Install the current LTS version of node. *Currently we are using 10.*
+Install the current LTS version of node. *Currently we are using 12.*
 
 ```bash
-nvm install 10
+nvm install 12
 ```
 
 Install the project dependencies
