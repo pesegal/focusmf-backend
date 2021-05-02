@@ -32,7 +32,7 @@ export class List {
   @Column({ length: 50 })
   name!: string
 
-  @Field(type => Task)
+  @Field(type => [Task])
   @OneToMany(type => Task, task => task.list)
   tasks!: Task[]
 
